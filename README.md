@@ -1,2 +1,2 @@
-# GoProjects
-An Hpp Gacha made for my bois
+# HppGacha
+## An Hpp Gacha made for my bois
