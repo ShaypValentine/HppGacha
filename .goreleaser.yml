@@ -19,6 +19,16 @@ archives:
       386: i386
       amd64: x86_64
     format: zip
+    files:
+      - licence*
+      - LICENCE*
+      - license*
+      - LICENSE*
+      - readme*
+      - README*
+      - changelog*
+      - CHANGELOG*
+      - banner_content.csv
 checksum:
   name_template: 'checksums.txt'
 snapshot:
