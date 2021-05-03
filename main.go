@@ -8,7 +8,7 @@ import (
 
 type BannerRoll struct {
 	name            string
-	acculatedWeight int
+	accumulatedWeight int
 }
 
 var accumulatedWeight int
@@ -31,7 +31,7 @@ func addEntry(name string, weight int) {
 	accumulatedWeight += weight
 	var UserHpp BannerRoll
 	UserHpp.name = name
-	UserHpp.acculatedWeight = accumulatedWeight
+	UserHpp.accumulatedWeight = accumulatedWeight
 	entries = append(entries, UserHpp)
 }
 
@@ -39,7 +39,7 @@ func getRandom() string {
 	rand.Seed(time.Now().UnixNano())
 	r := rand.Intn(1 * accumulatedWeight)
 	for _, entry := range entries {
-		if entry.acculatedWeight >= r {
+		if entry.accumulatedWeight >= r {
 			return entry.name
 		}
 	}
