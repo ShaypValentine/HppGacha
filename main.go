@@ -18,6 +18,7 @@ var accumulatedWeight int
 var entries []BannerRoll
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
 	csvBanner, err := os.Open("banner_content.csv")
 	if err != nil {
 		fmt.Println(err)
@@ -48,7 +49,6 @@ func addEntry(name string, weight int) {
 }
 
 func getRandom() string {
-	rand.Seed(time.Now().UnixNano())
 	r := rand.Intn(1 * accumulatedWeight)
 	for _, entry := range entries {
 		if entry.accumulatedWeight >= r {
