@@ -1,70 +1,44 @@
 package main
 
 import (
-	"encoding/csv"
-	"fmt"
-	"math/rand"
-	"os"
-	"strconv"
-	"time"
+	"log"
+	"net/http"
+	"text/template"
 )
 
-type BannerRoll struct {
-	name              string
-	accumulatedWeight int
-}
-
-var accumulatedWeight int
-var entries []BannerRoll
-
 func main() {
-	rand.Seed(time.Now().UnixNano())
-	csvBanner, err := os.Open("banner_content.csv")
-	if err != nil {
-		fmt.Println(err)
-	}
+	fileToLines("web/banner_content.csv")
 
-	defer csvBanner.Close()
-	csvLines, err := csv.NewReader(csvBanner).ReadAll()
-	if err != nil {
-		fmt.Println(err)
-	}
-	linesToEntries(csvLines)
+	http.Handle("/ressources/", http.StripPrefix("/ressources/", http.FileServer(http.Dir("./ressources"))))
 
-	for i := 0; i < 10; i++ {
-		u := getRandom()
+	http.HandleFunc("/roll", func(w http.ResponseWriter, r *http.Request) {
+		tpl, err := template.ParseFiles("src/rollCard.gohtml")
 		if err != nil {
-			fmt.Println(err)
+			log.Fatalln(err)
 		}
-		fmt.Printf("\nYou just found a wild %s\n", u)
-	}
-}
-
-func addEntry(name string, weight int) {
-	accumulatedWeight += weight
-	var UserHpp BannerRoll
-	UserHpp.name = name
-	UserHpp.accumulatedWeight = accumulatedWeight
-	entries = append(entries, UserHpp)
-}
-
-func getRandom() string {
-	r := rand.Intn(1 * accumulatedWeight)
-	for _, entry := range entries {
-		if entry.accumulatedWeight >= r {
-			return entry.name
+		if r.Method == "GET" {
+			w.Header().Set("Content-Type", "application/json")
+			err = tpl.Execute(w, getRandom())
+			if err != nil {
+				log.Fatalln(err)
+			}
 		}
-	}
-	return "error"
-}
 
-func linesToEntries(csvLines [][]string) {
+	})
 
-	for _, line := range csvLines {
-		weight, err := strconv.Atoi(line[1])
+	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+		tpl, err := template.ParseFiles("src/index.gohtml")
+
 		if err != nil {
-			fmt.Println(err)
+			log.Fatalln(err)
 		}
-		addEntry(line[0], weight)
+		err = tpl.Execute(w, getRandom())
+		if err != nil {
+			log.Fatalln(err)
+		}
+	})
+
+	if err := http.ListenAndServe(":8000", nil); err != nil {
+		log.Fatal(err)
 	}
 }
