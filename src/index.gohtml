@@ -20,14 +20,12 @@
 
 <script>
     function roll(){
-        console.log('gello')
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("rolled").innerHTML += this.responseText;
-            }
-        };
-        xhttp.open('GET','/roll')
-        xhttp.send()
+        fetch('/roll').then(function (response){
+           return response.text()
+        }).then(function(html){
+            document.getElementById("rolled").innerHTML += html;
+        }).catch(function (err){
+            console.warn(err)
+        })
     }
 </script>
