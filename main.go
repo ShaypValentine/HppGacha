@@ -26,7 +26,7 @@ func main() {
 
 	})
 
-	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		tpl, err := template.ParseFiles("src/index.gohtml")
 
 		if err != nil {
@@ -38,7 +38,7 @@ func main() {
 		}
 	})
 
-	if err := http.ListenAndServe(":8000", nil); err != nil {
+	if err := http.ListenAndServe(":80", nil); err != nil {
 		log.Fatal(err)
 	}
 }
