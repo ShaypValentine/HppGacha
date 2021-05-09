@@ -65,3 +65,8 @@ func fileToLines(filePath string) {
 	}
 	linesToEntries(csvLines)
 }
+
+func emptyEntries() {
+	entries = nil
+	accumulatedWeight = 0
+}
