@@ -11,6 +11,12 @@ func main() {
 
 	http.Handle("/ressources/", http.StripPrefix("/ressources/", http.FileServer(http.Dir("./ressources"))))
 
+	http.HandleFunc("/reload", func(w http.ResponseWriter, r *http.Request) {
+		emptyEntries()
+		fileToLines("web/banner_content.csv")
+		http.Redirect(w, r, "/", http.StatusAccepted)
+	})
+
 	http.HandleFunc("/roll", func(w http.ResponseWriter, r *http.Request) {
 		tpl, err := template.ParseFiles("src/rollCard.gohtml")
 		if err != nil {
