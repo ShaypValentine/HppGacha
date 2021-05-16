@@ -28,7 +28,6 @@ archives:
       - README*
       - changelog*
       - CHANGELOG*
-      - banner_content.csv
 checksum:
   name_template: 'checksums.txt'
 snapshot:
