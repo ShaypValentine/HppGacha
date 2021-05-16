@@ -23,7 +23,8 @@
         fetch('/roll').then(function (response){
            return response.text()
         }).then(function(html){
-            document.getElementById("rolled").innerHTML += html;
+        let rolled = document.getElementById("rolled")
+            rolled.innerHTML = html + rolled.innerHTML;
         }).catch(function (err){
             console.warn(err)
         })

@@ -1,19 +1,25 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"text/template"
 )
 
 func main() {
-	fileToLines("web/banner_content.csv")
+	db, err := databaseConnection()
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer db.Close()
+	dataToRoll(db)
 
 	http.Handle("/ressources/", http.StripPrefix("/ressources/", http.FileServer(http.Dir("./ressources"))))
 
 	http.HandleFunc("/reload", func(w http.ResponseWriter, r *http.Request) {
 		emptyEntries()
-		fileToLines("web/banner_content.csv")
+		dataToRoll(db)
 		http.Redirect(w, r, "/", http.StatusAccepted)
 	})
 

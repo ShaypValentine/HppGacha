@@ -1,12 +1,12 @@
 package main
 
 import (
-	"encoding/csv"
+	"database/sql"
 	"fmt"
 	"math/rand"
-	"os"
-	"strconv"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type BannerRoll struct {
@@ -41,32 +41,34 @@ func getRandom() BannerRoll {
 	return BannerRoll{}
 }
 
-func linesToEntries(csvLines [][]string) {
-
-	for _, line := range csvLines {
-		weight, err := strconv.Atoi(line[1])
-		if err != nil {
-			fmt.Println(err)
-		}
-		addEntry(line[0], line[2], weight)
-	}
-}
-
-func fileToLines(filePath string) {
-	csvBanner, err := os.Open(filePath)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	defer csvBanner.Close()
-	csvLines, err := csv.NewReader(csvBanner).ReadAll()
-	if err != nil {
-		fmt.Println(err)
-	}
-	linesToEntries(csvLines)
-}
-
 func emptyEntries() {
 	entries = nil
 	accumulatedWeight = 0
+}
+
+func databaseConnection() (*sql.DB, error) {
+	db, err := sql.Open("mysql", "root:ascalon@tcp(127.0.0.1:3306)/hppgacha")
+	db.SetConnMaxLifetime(time.Minute * 3)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(10)
+
+	return db, err
+}
+
+func dataToRoll(db *sql.DB) {
+	results, err := db.Query("Select name,pathToPic,weight FROM rollable_users")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for results.Next() {
+		var accumulatedWeight int
+		var name string
+		var avatar string
+		err = results.Scan(&name, &avatar, &accumulatedWeight)
+		if err != nil {
+			fmt.Println(err)
+		}
+		addEntry(name, avatar, accumulatedWeight)
+	}
 }
