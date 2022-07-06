@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type BannerRoll struct {
@@ -47,7 +47,7 @@ func emptyEntries() {
 }
 
 func databaseConnection() (*sql.DB, error) {
-	db, err := sql.Open("mysql", "root:ascalon@tcp(127.0.0.1:3306)/hppgacha")
+	db, err := sql.Open("sqlite3", "hppgacha.db")
 	db.SetConnMaxLifetime(time.Minute * 3)
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
