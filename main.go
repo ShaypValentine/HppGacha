@@ -30,7 +30,14 @@ func main() {
 		}
 		if r.Method == "GET" {
 			w.Header().Set("Content-Type", "application/json")
-			err = tpl.Execute(w, getRandom())
+			rolledItem := getRandom()
+			if rolledItem.Rarity == 2 {
+				tpl, err = template.ParseFiles("src/rollRareCard.gohtml")
+				if err != nil {
+					log.Fatalln(err)
+				}
+			}
+			err = tpl.Execute(w, rolledItem)
 			if err != nil {
 				log.Fatalln(err)
 			}

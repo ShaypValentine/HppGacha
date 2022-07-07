@@ -1,4 +1,4 @@
-module lootbox
+module hppGacha
 
 go 1.16
 

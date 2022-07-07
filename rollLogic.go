@@ -13,6 +13,7 @@ type BannerRoll struct {
 	Name              string
 	Avatar            string
 	accumulatedWeight int
+	Rarity            int
 }
 
 func init() {
@@ -22,12 +23,13 @@ func init() {
 var accumulatedWeight int
 var entries []BannerRoll
 
-func addEntry(name string, avatar string, weight int) {
+func addEntry(name string, avatar string, weight int, rarity int) {
 	accumulatedWeight += weight
 	var UserHpp BannerRoll
 	UserHpp.Name = name
 	UserHpp.Avatar = avatar
 	UserHpp.accumulatedWeight = accumulatedWeight
+	UserHpp.Rarity = rarity
 	entries = append(entries, UserHpp)
 }
 
@@ -56,7 +58,7 @@ func databaseConnection() (*sql.DB, error) {
 }
 
 func dataToRoll(db *sql.DB) {
-	results, err := db.Query("Select name,pathToPic,weight FROM rollable_users")
+	results, err := db.Query("Select name,pathToPic,weight,rarity FROM rollable_users")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -65,10 +67,11 @@ func dataToRoll(db *sql.DB) {
 		var accumulatedWeight int
 		var name string
 		var avatar string
-		err = results.Scan(&name, &avatar, &accumulatedWeight)
+		var rarity int
+		err = results.Scan(&name, &avatar, &accumulatedWeight, &rarity)
 		if err != nil {
 			fmt.Println(err)
 		}
-		addEntry(name, avatar, accumulatedWeight)
+		addEntry(name, avatar, accumulatedWeight, rarity)
 	}
 }
