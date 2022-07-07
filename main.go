@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"text/template"
 )
 
@@ -56,8 +57,8 @@ func main() {
 			log.Fatalln(err)
 		}
 	})
-
-	if err := http.ListenAndServe(":80", nil); err != nil {
+	port := os.Getenv("PORT")
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal(err)
 	}
 }
