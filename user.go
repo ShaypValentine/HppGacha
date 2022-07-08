@@ -11,20 +11,32 @@ import (
 )
 
 type Credentials struct {
+	Id       int    `json:"id" db:"id"`
 	Username string `json:"username" db:"username"`
 	Password string `json:"password" db:"password"`
 }
 
 type session struct {
 	username string
+	id       int
 	expiry   time.Time
 }
 
 type user struct {
 	Username string `json:"username" db:"username"`
+	Id       int    `json:"id" db:"id"`
 }
 
 var sessions = map[string]session{}
+
+func addToInventory(connectedUser user, card BannerRoll) {
+	cardAlreadyExist := cardExistInInventory(DB, connectedUser.Id, card.Name)
+	if cardAlreadyExist {
+		DB.Exec("UPDATE inventory SET quantity = quantity + 1 where user = ? and cardName = ?", connectedUser.Id, card.Name)
+	} else {
+		DB.Exec("INSERT INTO inventory (user, cardName,quantity) VALUES (?, ?,1)", connectedUser.Id, card.Name)
+	}
+}
 
 func (s session) isExpired() bool {
 	return s.expiry.Before(time.Now())
@@ -76,7 +88,7 @@ func signin(w http.ResponseWriter, r *http.Request) {
 	creds.Username = r.PostFormValue("username")
 	creds.Password = r.PostFormValue("password")
 	// Get the existing entry present in the database for the given username
-	result := DB.QueryRow("select password from users where username=$1", creds.Username)
+	result := DB.QueryRow("select id,password from users where username=$1", creds.Username)
 	if err != nil {
 		// If there is an issue with the database, return a 500 error
 		log.Fatal(err)
@@ -86,7 +98,8 @@ func signin(w http.ResponseWriter, r *http.Request) {
 	// We create another instance of `Credentials` to store the credentials we get from the database
 	storedCreds := &Credentials{}
 	// Store the obtained password in `storedCreds`
-	err = result.Scan(&storedCreds.Password)
+	err = result.Scan(&storedCreds.Id, &storedCreds.Password)
+	log.Println(storedCreds.Id)
 	if err != nil {
 		// If an entry with the username does not exist, send an "Unauthorized"(401) status
 		if err == sql.ErrNoRows {
@@ -100,12 +113,14 @@ func signin(w http.ResponseWriter, r *http.Request) {
 
 	// Compare the stored hashed password, with the hashed version of the password that was received
 	if err = bcrypt.CompareHashAndPassword([]byte(storedCreds.Password), []byte(creds.Password)); err != nil {
-		// If the two passwords don't match, return a 401 status
+		w.WriteHeader(http.StatusUnauthorized)
+		return
 	}
 	sessionToken := uuid.NewString()
 	expiresAt := time.Now().Add(120 * time.Second)
 	sessions[sessionToken] = session{
 		username: creds.Username,
+		id:       storedCreds.Id,
 		expiry:   expiresAt,
 	}
 	// If we reach this point, that means the users password was correct, and that they are authorized
@@ -120,4 +135,20 @@ func signin(w http.ResponseWriter, r *http.Request) {
 	})
 	http.Redirect(w, r, "/", http.StatusFound)
 
+}
+
+func cardExistInInventory(db *sql.DB, userId int, cardname string) bool {
+	sqlStmt := `SELECT cardName FROM inventory WHERE user = ? AND cardName = ?`
+	err := db.QueryRow(sqlStmt, userId, cardname).Scan(&cardname)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			// a real error happened! you should change your function return
+			// to "(bool, error)" and return "false, err" here
+			log.Print(err)
+		}
+
+		return false
+	}
+
+	return true
 }

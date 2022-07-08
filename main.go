@@ -10,6 +10,7 @@ import (
 )
 
 var DB *sql.DB
+var connectedUser user
 
 func main() {
 	db, err := databaseConnection()
@@ -36,6 +37,7 @@ func main() {
 		if r.Method == "GET" {
 			w.Header().Set("Content-Type", "application/json")
 			rolledItem := getRandom()
+			addToInventory(connectedUser, rolledItem)
 			if rolledItem.Rarity == 2 {
 				tpl, err = template.ParseFiles("src/rollRareCard.gohtml")
 				if err != nil {
@@ -53,7 +55,6 @@ func main() {
 	http.HandleFunc("/login", loginPageHandler)
 	http.HandleFunc("/inscription", inscriptionPageHandler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		var connectedUser user
 		tpl, err := template.ParseFiles("src/index.gohtml")
 		if err != nil {
 			log.Fatalln(err)
@@ -73,6 +74,7 @@ func main() {
 				return
 			}
 			connectedUser.Username = userSession.username
+			connectedUser.Id = userSession.id
 		}
 		err = tpl.Execute(w, connectedUser)
 		if err != nil {
