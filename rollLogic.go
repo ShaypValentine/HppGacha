@@ -49,11 +49,11 @@ func emptyEntries() {
 }
 
 func databaseConnection() (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", "hppgacha.db")
+	db, err := sql.Open("sqlite3", "hppgacha.db?cache=shared&mode=rwc")
 	db.SetConnMaxLifetime(time.Minute * 3)
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
-
+	DB = db
 	return db, err
 }
 

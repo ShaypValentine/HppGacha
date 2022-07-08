@@ -4,9 +4,18 @@ body {
 
 .grid {
   display: grid;
+  grid-template-columns: 1fr auto 1fr;
+}
+.grid-left {
+  place-content: center;
+}
+.grid-center {
   place-content: center;
 }
 
+#roll{
+  width: 100%;
+}
 .rollGrid {
   display: grid;
   grid-template-columns: repeat(4, auto);

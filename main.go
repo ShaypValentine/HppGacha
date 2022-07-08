@@ -1,12 +1,15 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"text/template"
 )
+
+var DB *sql.DB
 
 func main() {
 	db, err := databaseConnection()
@@ -23,7 +26,8 @@ func main() {
 		dataToRoll(db)
 		http.Redirect(w, r, "/", http.StatusAccepted)
 	})
-
+	http.HandleFunc("/signup", signup)
+	http.HandleFunc("/signin", signin)
 	http.HandleFunc("/roll", func(w http.ResponseWriter, r *http.Request) {
 		tpl, err := template.ParseFiles("src/rollCard.gohtml")
 		if err != nil {
@@ -46,19 +50,62 @@ func main() {
 
 	})
 
+	http.HandleFunc("/login", loginPageHandler)
+	http.HandleFunc("/inscription", inscriptionPageHandler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		var connectedUser user
 		tpl, err := template.ParseFiles("src/index.gohtml")
-
 		if err != nil {
 			log.Fatalln(err)
 		}
-		err = tpl.Execute(w, getRandom())
+		sessionCookie, err := r.Cookie("session_token")
+		if err == nil {
+			token := sessionCookie.Value
+			userSession, exists := sessions[token]
+			if !exists {
+				// If the session token is not present in session map, return an unauthorized error
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+			if userSession.isExpired() {
+				delete(sessions, token)
+				w.WriteHeader(http.StatusUnauthorized)
+				return
+			}
+			connectedUser.Username = userSession.username
+		}
+		err = tpl.Execute(w, connectedUser)
 		if err != nil {
 			log.Fatalln(err)
 		}
 	})
+
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8008"
+	}
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func loginPageHandler(w http.ResponseWriter, request *http.Request) {
+	tpl, err := template.ParseFiles("src/loginForm.html")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	err = tpl.Execute(w, nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+}
+func inscriptionPageHandler(w http.ResponseWriter, request *http.Request) {
+	tpl, err := template.ParseFiles("src/inscriptionForm.html")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	err = tpl.Execute(w, nil)
+	if err != nil {
+		log.Fatalln(err)
 	}
 }

@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <link rel="stylesheet" href="/ressources/hpp.css">
-        <meta charset="UTF-8">
-        <title>Hpp Roll </title>
-    </head>
 
-    <body>
-        <div class="grid">
+<head>
+    <link rel="stylesheet" href="/ressources/hpp.css">
+    <meta charset="UTF-8">
+    <title>Hpp Roll </title>
+</head>
+
+<body>
+    <div class="grid">
+        <div class="grid-left">
+            {{ if not .Username }}
+            <a href="/login"><button>Login</button></a>
+            <a href="/inscription"><button>Sign up</button></a>
+            {{ else }}
+            Connected as : {{ .Username }}
+            {{end}}
+        </div>
+        <div class="grid-center">
             <h1>Welcome to the HppGacha (Wip)</h1>
             <button id="roll" onclick="roll()">Roll</button>
         </div>
-        <div  id="rolled" class="rollGrid">
-        </div>
+    </div>
+    <div id="rolled" class="rollGrid">
+    </div>
 
     <script type="text/javascript" src="/ressources/hpp.js"></script>
-    </body>    
+</body>
+
 </html>
