@@ -84,7 +84,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8008"
+		port = "80"
 	}
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal(err)
