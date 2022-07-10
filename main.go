@@ -10,7 +10,6 @@ import (
 )
 
 var DB *sql.DB
-var connectedUser user
 
 func main() {
 	db, err := databaseConnection()
@@ -37,6 +36,7 @@ func main() {
 		if r.Method == "GET" {
 			w.Header().Set("Content-Type", "application/json")
 			rolledItem := getRandom()
+			connectedUser := getConnectedUser(r)
 			addToInventory(connectedUser, rolledItem)
 			if rolledItem.Rarity == 2 {
 				tpl, err = template.ParseFiles("src/rollRareCard.gohtml")
@@ -59,23 +59,7 @@ func main() {
 		if err != nil {
 			log.Fatalln(err)
 		}
-		sessionCookie, err := r.Cookie("session_token")
-		if err == nil {
-			token := sessionCookie.Value
-			userSession, exists := sessions[token]
-			if !exists {
-				// If the session token is not present in session map, return an unauthorized error
-				w.WriteHeader(http.StatusUnauthorized)
-				return
-			}
-			if userSession.isExpired() {
-				delete(sessions, token)
-				w.WriteHeader(http.StatusUnauthorized)
-				return
-			}
-			connectedUser.Username = userSession.username
-			connectedUser.Id = userSession.id
-		}
+		connectedUser := getConnectedUser(r)
 		err = tpl.Execute(w, connectedUser)
 		if err != nil {
 			log.Fatalln(err)
@@ -92,11 +76,19 @@ func main() {
 }
 
 func loginPageHandler(w http.ResponseWriter, request *http.Request) {
+	error := request.URL.Query().Get("error")
+	errorText := ""
+	if error != "" {
+		errorText = "No account with this username was found."
+		if error == "BadCreds" {
+			errorText = "wrong password or username."
+		}
+	}
 	tpl, err := template.ParseFiles("src/loginForm.html")
 	if err != nil {
 		log.Fatalln(err)
 	}
-	err = tpl.Execute(w, nil)
+	err = tpl.Execute(w, errorText)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -110,4 +102,22 @@ func inscriptionPageHandler(w http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		log.Fatalln(err)
 	}
+}
+
+func getConnectedUser(r *http.Request) user {
+	var connectedUser user
+	sessionCookie, err := r.Cookie("session_token")
+	if err == nil {
+		token := sessionCookie.Value
+		userSession, exists := sessions[token]
+		if !exists {
+			log.Println("user n'existe pas")
+		}
+		if userSession.isExpired() {
+			delete(sessions, token)
+		}
+		connectedUser.Username = userSession.username
+		connectedUser.Id = userSession.id
+	}
+	return connectedUser
 }
