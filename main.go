@@ -44,6 +44,7 @@ func main() {
 					log.Fatalln(err)
 				}
 			}
+			Refresh(w,r)			
 			err = tpl.Execute(w, rolledItem)
 			if err != nil {
 				log.Fatalln(err)

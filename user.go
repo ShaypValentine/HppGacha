@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -51,7 +52,7 @@ func signup(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	creds.Username = r.PostFormValue("username")
+	creds.Username = strings.ToLower(r.PostFormValue("username"))
 	creds.Password = r.PostFormValue("password")
 	if err != nil {
 		// If there is something wrong with the request body, return a 400 status
@@ -83,7 +84,7 @@ func signin(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	creds.Username = r.PostFormValue("username")
+	creds.Username = strings.ToLower(r.PostFormValue("username"))
 	creds.Password = r.PostFormValue("password")
 	// Get the existing entry present in the database for the given username
 	result := DB.QueryRow("select id,password from users where username=$1", creds.Username)
@@ -149,4 +150,49 @@ func cardExistInInventory(db *sql.DB, userId int, cardname string) bool {
 	}
 
 	return true
+}
+
+func Refresh(w http.ResponseWriter, r *http.Request) {
+	// (BEGIN) The code from this point is the same as the first part of the `Welcome` route
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	sessionToken := c.Value
+	userSession, exists := sessions[sessionToken]
+	if !exists {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	if userSession.isExpired() {
+		delete(sessions, sessionToken)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	// (END) The code until this point is the same as the first part of the `Welcome` route
+
+	// If the previous session is valid, create a new session token for the current user
+	newSessionToken := uuid.NewString()
+	expiresAt := time.Now().Add(120 * time.Second)
+
+	// Set the token in the session map, along with the user whom it represents
+	sessions[newSessionToken] = session{
+		username: userSession.username,
+		id:       userSession.id,
+		expiry:   expiresAt,
+	}
+
+	// Delete the older session token
+	delete(sessions, sessionToken)
+	// Set the new token as the users `session_token` cookie
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_token",
+		Value:   newSessionToken,
+		Expires: time.Now().Add(120 * time.Second),
+	})
 }
