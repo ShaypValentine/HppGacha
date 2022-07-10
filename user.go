@@ -55,7 +55,6 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	creds.Password = r.PostFormValue("password")
 	if err != nil {
 		// If there is something wrong with the request body, return a 400 status
-		log.Fatal(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -67,7 +66,6 @@ func signup(w http.ResponseWriter, r *http.Request) {
 	}
 	// Next, insert the username, along with the hashed password into the database
 	if _, err = DB.Exec("INSERT into users (userName,password) values ($1, $2)", creds.Username, string(hashedPassword)); err != nil {
-		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -99,11 +97,10 @@ func signin(w http.ResponseWriter, r *http.Request) {
 	storedCreds := &Credentials{}
 	// Store the obtained password in `storedCreds`
 	err = result.Scan(&storedCreds.Id, &storedCreds.Password)
-	log.Println(storedCreds.Id)
 	if err != nil {
 		// If an entry with the username does not exist, send an "Unauthorized"(401) status
 		if err == sql.ErrNoRows {
-			w.WriteHeader(http.StatusUnauthorized)
+			http.Redirect(w, r, "/login?error=NoUser", 302)
 			return
 		}
 		// If the error is of any other type, send a 500 status
@@ -113,6 +110,7 @@ func signin(w http.ResponseWriter, r *http.Request) {
 
 	// Compare the stored hashed password, with the hashed version of the password that was received
 	if err = bcrypt.CompareHashAndPassword([]byte(storedCreds.Password), []byte(creds.Password)); err != nil {
+		http.Redirect(w, r, "/login?error=BadCreds", 302)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
