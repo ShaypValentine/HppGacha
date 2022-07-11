@@ -37,11 +37,13 @@ func main() {
 	// Launch app on OS PORT var or 80
 	env := os.Getenv("ENV")
 	if env == "" {
+		log.Println(" hello")
 		if err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/hppgacha.art/fullchain.pem", "/etc/letsencrypt/live/hppgacha.art/privatekey.pem", nil); err != nil {
 			log.Fatal(err)
 		}
 	} else {
-		if err := http.ListenAndServe(":8008", nil); err != nil {
+		log.Println(" hello")
+			if err := http.ListenAndServe(":8008", nil); err != nil {
 			log.Fatal(err)
 		}
 	}
