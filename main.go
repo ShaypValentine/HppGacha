@@ -35,11 +35,14 @@ func main() {
 	http.HandleFunc("/admin/show_users", admin.ShowUser)
 	http.HandleFunc("/admin/process_card", admin.ProcessCard)
 	// Launch app on OS PORT var or 80
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "80"
-	}
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		log.Fatal(err)
+	env := os.Getenv("ENV")
+	if env == "" {
+		if err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/hppgacha.art/fullchain.pem", "/etc/letsencrypt/live/hppgacha.art/privatekey.pem", nil); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		if err := http.ListenAndServe(":8008", nil); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
