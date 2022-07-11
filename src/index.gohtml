@@ -17,11 +17,12 @@
             Connected as : {{ .User.Username }}
             <div>
                 <h2>My inventory : </h2>
+                {{ if .Inventory.Cards}}
                 {{ range .Inventory.Cards }}
                 <div>
                     {{ .Name}} : x{{ .Quantity }}
                 </div>
-
+                {{end}}
                 {{end}}
             </div>
                 {{end}}
