@@ -2,3 +2,5 @@ hppgacha.exe
 hppgacha.db
 database.db
 dist/
+temp-pics/*
+ressources/pics

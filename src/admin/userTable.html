@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HppGacha Admin</title>
+    <link rel="stylesheet" href="/ressources/admin.css">
+</head>
+
+<body>
+    <ul>
+        <li><a href="/admin">Home</a></li>
+        <li><a href="/admin/new_card">New card</a></li>
+        <li><a class="active" href="/admin/show_users">See users</a></li>
+    </ul>
+    <div class="side">
+        <table id="users">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Roll available</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ if .UserInfo}}
+                {{ range .UserInfo}}
+                <tr>
+                    <td>{{ .Username }}</td>
+                    <td>{{ .Rolls }}</td>
+                    <td><button>+</button></td>
+                </tr>
+                {{end}}
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

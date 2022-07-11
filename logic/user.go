@@ -26,6 +26,16 @@ type user struct {
 	Id       int    `json:"id" db:"id"`
 }
 
+type UserInfo struct {
+	Username string `json:"username" db:"username"`
+	Id       int    `json:"id" db:"id"`
+	Rolls    int    `json:"rolls" db:"rolls"`
+}
+
+type UsersInfos struct {
+	UserInfo []UserInfo
+}
+
 var sessions = map[string]session{}
 
 func addToInventory(connectedUser user, card BannerRoll) {
@@ -109,4 +119,18 @@ func consumeRoll(user user) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func GetUsersInfos() (infos UsersInfos) {
+	var userInfo UserInfo
+	rows, err := DB.Query("SELECT id, username,availableRoll FROM users")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for rows.Next() {
+		rows.Scan(&userInfo.Id, &userInfo.Username, &userInfo.Rolls)
+		infos.UserInfo = append(infos.UserInfo, userInfo)
+	}
+	return infos
 }
