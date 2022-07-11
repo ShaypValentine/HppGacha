@@ -20,7 +20,10 @@ jobs:
 
     - name: Build
       run: go build -v ./...
-    
+      
+    - name: Stop app    
+      run: sudo systemctl stop hppApp.service
+      
     - name: Copy
       run: sudo cp -r . /home/ubuntu/hppApp
 
