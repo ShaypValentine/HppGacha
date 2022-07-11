@@ -3,4 +3,5 @@ hppgacha.db
 database.db
 dist/
 temp-pics/*
+!temp-pics/.gitkeep
 ressources/pics
