@@ -6,7 +6,6 @@ import (
 	logic "hppGacha/logic"
 	"log"
 	"net/http"
-	"os"
 )
 
 func main() {
@@ -40,19 +39,13 @@ func main() {
 			log.Fatalf("ListenAndServe error: %v", err)
 		}
 	}()
-	env := os.Getenv("ENV")
-	if env == "" {
-		if err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/hppgacha.art/fullchain.pem", "/etc/letsencrypt/live/hppgacha.art/privkey.pem", nil); err != nil {
-			log.Fatal(err)
-		}
-	} else {
-		if err := http.ListenAndServe(":8008", nil); err != nil {
-			log.Fatal(err)
-		}
+
+	if err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/hppgacha.art/fullchain.pem", "/etc/letsencrypt/live/hppgacha.art/privkey.pem", nil); err != nil {
+		log.Fatal(err)
 	}
 
 }
 
 func redirectTLS(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "https://51.83.47.95:443"+r.RequestURI, http.StatusMovedPermanently)
+	http.Redirect(w, r, "https://hppgacha.art:443"+r.RequestURI, http.StatusMovedPermanently)
 }
