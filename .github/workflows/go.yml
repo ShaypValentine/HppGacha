@@ -18,14 +18,14 @@ jobs:
       with:
         go-version: 1.18
 
-    - name: Build
-      run: go build -v ./...
-      
     - name: Stop app    
       run: sudo systemctl stop hppApp.service
-      
+
+    - name: Build
+      run: go build -v ./...
+
     - name: Copy
-      run: sudo cp -r . /home/ubuntu/hppApp
+      run: sudo cp -fr . /home/ubuntu/hppApp
 
     - name: Launch app
       run: sudo systemctl restart hppApp.service

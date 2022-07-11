@@ -34,18 +34,7 @@ func main() {
 	http.HandleFunc("/admin/show_users", admin.ShowUser)
 	http.HandleFunc("/admin/process_card", admin.ProcessCard)
 	// Launch app on OS PORT var or 8008
-	go func() {
-		if err := http.ListenAndServe(":80", http.HandlerFunc(redirectTLS)); err != nil {
-			log.Fatalf("ListenAndServe error: %v", err)
-		}
-	}()
-
 	if err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/hppgacha.art/fullchain.pem", "/etc/letsencrypt/live/hppgacha.art/privkey.pem", nil); err != nil {
 		log.Fatal(err)
 	}
-
-}
-
-func redirectTLS(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "https://hppgacha.art:443"+r.RequestURI, http.StatusMovedPermanently)
 }
