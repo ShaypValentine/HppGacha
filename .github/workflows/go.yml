@@ -21,6 +21,9 @@ jobs:
     - name: Stop app    
       run: sudo systemctl stop hppApp.service
 
+    - name: Delete old binaries
+      run: sudo rm -rf hppGacha
+
     - name: Build
       run: go build -v ./...
 
