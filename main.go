@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 "strings"
+"path/filepath"
 )
 
 func main() {
@@ -16,11 +17,11 @@ func main() {
 	}
 	defer db.Close()
 	logic.DataToRoll(db)
-http.FileServer(neuteredFileSystem{http.Dir("./ressources")})
+fileServer := http.FileServer(neuteredFileSystem{http.Dir("./ressources")})
        // fs := http.FileServer(http.Dir("ressources"))
 	http.Handle("/ressources/", http.StripPrefix("/ressources",fileServer))
 
-	fileServer := 
+	
 	http.HandleFunc("/reload", func(w http.ResponseWriter, r *http.Request) {
 		logic.EmptyEntries()
 		logic.DataToRoll(db)
