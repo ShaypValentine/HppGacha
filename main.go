@@ -17,8 +17,9 @@ func main() {
 	defer db.Close()
 	logic.DataToRoll(db)
         fs := http.FileServer(http.Dir("ressources"))
-	http.Handle("/ressources/", http.StripPrefix("/ressources",intercept(fs)))
+	//http.Handle("/ressources/", http.StripPrefix("/ressources",intercept(fs)))
 
+	http.Handle("/ressources", noDirListing(http.FileServer(http.Dir("./ressources/"))))
 	http.HandleFunc("/reload", func(w http.ResponseWriter, r *http.Request) {
 		logic.EmptyEntries()
 		logic.DataToRoll(db)
@@ -40,15 +41,13 @@ func main() {
 	}
 }
 
-
-
-func intercept(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        if strings.HasSuffix(r.URL.Path, "/") {
-            http.NotFound(w, r)
-            return
-        }
-
-        next.ServeHTTP(w, r)
-    })
+func noDirListing(h http.Handler) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasSuffix(r.URL.Path, "/") {
+			http.NotFound(w, r)
+			return
+		}
+		h.ServeHTTP(w, r)
+	})
 }
+
