@@ -6,6 +6,7 @@ import (
 	logic "hppGacha/logic"
 	"log"
 	"net/http"
+"strings"
 )
 
 func main() {
