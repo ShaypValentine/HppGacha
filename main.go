@@ -6,7 +6,8 @@ import (
 	logic "hppGacha/logic"
 	"log"
 	"net/http"
-"path/filepath"
+	"os"
+	"path/filepath"
 )
 
 func main() {
@@ -16,11 +17,10 @@ func main() {
 	}
 	defer db.Close()
 	logic.DataToRoll(db)
-fileServer := http.FileServer(neuteredFileSystem{http.Dir("./ressources")})
-       // fs := http.FileServer(http.Dir("ressources"))
-	http.Handle("/ressources/", http.StripPrefix("/ressources",fileServer))
+	fileServer := http.FileServer(neuteredFileSystem{http.Dir("./ressources")})
+	// fs := http.FileServer(http.Dir("ressources"))
+	http.Handle("/ressources/", http.StripPrefix("/ressources", fileServer))
 
-	
 	http.HandleFunc("/reload", func(w http.ResponseWriter, r *http.Request) {
 		logic.EmptyEntries()
 		logic.DataToRoll(db)
@@ -37,33 +37,40 @@ fileServer := http.FileServer(neuteredFileSystem{http.Dir("./ressources")})
 	http.HandleFunc("/admin/show_users", admin.ShowUser)
 	http.HandleFunc("/admin/process_card", admin.ProcessCard)
 	// Launch app on OS PORT var or 8008
-	if err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/hppgacha.art/fullchain.pem", "/etc/letsencrypt/live/hppgacha.art/privkey.pem", nil); err != nil {
-		log.Fatal(err)
+	env := os.Getenv("LOCALENV")
+	if env != "" {
+		if err := http.ListenAndServe(":80", nil); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		if err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/hppgacha.art/fullchain.pem", "/etc/letsencrypt/live/hppgacha.art/privkey.pem", nil); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
 type neuteredFileSystem struct {
-    fs http.FileSystem
+	fs http.FileSystem
 }
 
 func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
-    f, err := nfs.fs.Open(path)
-    if err != nil {
-        return nil, err
-    }
+	f, err := nfs.fs.Open(path)
+	if err != nil {
+		return nil, err
+	}
 
-    s, err := f.Stat()
-    if s.IsDir() {
-        index := filepath.Join(path, "index.html")
-        if _, err := nfs.fs.Open(index); err != nil {
-            closeErr := f.Close()
-            if closeErr != nil {
-                return nil, closeErr
-            }
+	s, err := f.Stat()
+	if s.IsDir() {
+		index := filepath.Join(path, "index.html")
+		if _, err := nfs.fs.Open(index); err != nil {
+			closeErr := f.Close()
+			if closeErr != nil {
+				return nil, closeErr
+			}
 
-            return nil, err
-        }
-    }
+			return nil, err
+		}
+	}
 
-    return f, nil
+	return f, nil
 }
