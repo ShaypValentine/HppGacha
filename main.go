@@ -16,10 +16,11 @@ func main() {
 	}
 	defer db.Close()
 	logic.DataToRoll(db)
+http.FileServer(neuteredFileSystem{http.Dir("./ressources")})
        // fs := http.FileServer(http.Dir("ressources"))
-	//http.Handle("/ressources/", http.StripPrefix("/ressources",intercept(fs)))
+	http.Handle("/ressources/", http.StripPrefix("/ressources",fileServer))
 
-	http.Handle("/ressources", noDirListing(http.FileServer(http.Dir("./ressources/"))))
+	fileServer := 
 	http.HandleFunc("/reload", func(w http.ResponseWriter, r *http.Request) {
 		logic.EmptyEntries()
 		logic.DataToRoll(db)
@@ -41,13 +42,28 @@ func main() {
 	}
 }
 
-func noDirListing(h http.Handler) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if strings.HasSuffix(r.URL.Path, "/") {
-			http.NotFound(w, r)
-			return
-		}
-		h.ServeHTTP(w, r)
-	})
+type neuteredFileSystem struct {
+    fs http.FileSystem
 }
 
+func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
+    f, err := nfs.fs.Open(path)
+    if err != nil {
+        return nil, err
+    }
+
+    s, err := f.Stat()
+    if s.IsDir() {
+        index := filepath.Join(path, "index.html")
+        if _, err := nfs.fs.Open(index); err != nil {
+            closeErr := f.Close()
+            if closeErr != nil {
+                return nil, closeErr
+            }
+
+            return nil, err
+        }
+    }
+
+    return f, nil
+}
