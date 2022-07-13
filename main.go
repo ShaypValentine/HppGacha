@@ -29,7 +29,7 @@ func main() {
 	http.HandleFunc("/login", logic.LoginPageHandler)
 	http.HandleFunc("/inscription", logic.InscriptionPageHandler)
 	http.HandleFunc("/", logic.Index)
-	http.HandleFunc("/admin", admin.Index)
+	http.HandleFunc("/adminw", admin.Index)
 	http.HandleFunc("/admin/new_card", admin.NewCard)
 	http.HandleFunc("/admin/show_users", admin.ShowUser)
 	http.HandleFunc("/admin/process_card", admin.ProcessCard)
