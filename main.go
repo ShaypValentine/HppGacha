@@ -15,8 +15,8 @@ func main() {
 	}
 	defer db.Close()
 	logic.DataToRoll(db)
-
-	http.Handle("/ressources/", http.StripPrefix("/ressources/", http.FileServer(http.Dir("./ressources"))))
+        fs := http.FileServer(http.Dir("./ressources"))
+	http.Handle("/ressources/", http.StripPrefix("/ressources/",intercept(fs)))
 
 	http.HandleFunc("/reload", func(w http.ResponseWriter, r *http.Request) {
 		logic.EmptyEntries()
@@ -37,4 +37,17 @@ func main() {
 	if err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/hppgacha.art/fullchain.pem", "/etc/letsencrypt/live/hppgacha.art/privkey.pem", nil); err != nil {
 		log.Fatal(err)
 	}
+}
+
+
+
+func intercept(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        if strings.HasSuffix(r.URL.Path, "/") {
+            http.NotFound(w, r)
+            return
+        }
+
+        next.ServeHTTP(w, r)
+    })
 }
