@@ -21,7 +21,7 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 	}
 	if r.Method == "GET" {
 		w.Header().Set("Content-Type", "application/json")
-		connectedUser := getConnectedUser(r)
+		connectedUser, exists := getConnectedUser(w, r)
 		if canRoll(connectedUser) {
 			rolledItem := getRandom()
 			consumeRoll(connectedUser)
@@ -32,7 +32,9 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 					log.Fatalln(err)
 				}
 			}
-			Refresh(w, r)
+			if exists {
+				Refresh(w, r)
+			}
 			err = tpl.Execute(w, rolledItem)
 			if err != nil {
 				log.Fatalln(err)
@@ -53,9 +55,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	connectedUser := getConnectedUser(r)
+	connectedUser, exists := getConnectedUser(w, r)
 	indexInfos.User = connectedUser
-	if connectedUser.Id != 0 {
+	if exists {
 		indexInfos.Inventory = getInventoryForUser(connectedUser)
 	}
 
@@ -94,22 +96,23 @@ func InscriptionPageHandler(w http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func getConnectedUser(r *http.Request) user {
+func getConnectedUser(w http.ResponseWriter, r *http.Request) (user, bool) {
 	var connectedUser user
 	sessionCookie, err := r.Cookie("session_token")
 	if err == nil {
 		token := sessionCookie.Value
 		userSession, exists := sessions[token]
 		if !exists {
-			log.Println("Guest mode or unknow user")
+			return connectedUser, exists
 		}
 		if userSession.isExpired() {
 			delete(sessions, token)
 		}
 		connectedUser.Username = userSession.username
 		connectedUser.Id = userSession.id
+		return connectedUser, exists
 	}
-	return connectedUser
+	return connectedUser, false
 }
 
 func Signup(w http.ResponseWriter, r *http.Request) {
@@ -173,7 +176,7 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	sessionToken := uuid.NewString()
-	expiresAt := time.Now().Add(120 * time.Second)
+	expiresAt := time.Now().Add(600 * time.Second)
 	sessions[sessionToken] = session{
 		username: creds.Username,
 		id:       storedCreds.Id,

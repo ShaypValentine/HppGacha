@@ -97,7 +97,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newSessionToken := uuid.NewString()
-	expiresAt := time.Now().Add(120 * time.Second)
+	expiresAt := time.Now().Add(600 * time.Second)
 
 	sessions[newSessionToken] = session{
 		username: userSession.username,
@@ -110,7 +110,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_token",
 		Value:   newSessionToken,
-		Expires: time.Now().Add(120 * time.Second),
+		Expires: time.Now().Add(600 * time.Second),
 	})
 }
 

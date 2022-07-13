@@ -16,7 +16,7 @@
             <a href="/inscription"><button>Sign up</button></a>
             {{ else }}
             Connected as : {{ .User.Username }}
-            <div>
+            <div id="connected" data-connected=true>
                 <h2>My inventory : </h2>
                 {{ if .Inventory.Cards}}
                 {{ range .Inventory.Cards }}
