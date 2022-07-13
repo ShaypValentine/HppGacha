@@ -1,5 +1,4 @@
 function roll() {
-    console.log('hello')
     if (isConnectedAndCookieExpired()) {
         window.location.replace(window.location.href);
     } else {
@@ -24,5 +23,5 @@ function isConnectedAndCookieExpired() {
         }
         return false
     }
-    return true
+    return false 
 }
