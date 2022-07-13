@@ -16,7 +16,7 @@ func main() {
 	}
 	defer db.Close()
 	logic.DataToRoll(db)
-        fs := http.FileServer(http.Dir("./ressources"))
+        fs := http.FileServer(http.Dir("ressources"))
 	http.Handle("/ressources/", http.StripPrefix("/ressources/",intercept(fs)))
 
 	http.HandleFunc("/reload", func(w http.ResponseWriter, r *http.Request) {
