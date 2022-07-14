@@ -11,11 +11,15 @@ body {
   place-content: center;
 }
 
+
+.grid-right {
+  text-align: center;
+}
 .grid-center {
   place-content: center;
 }
 
-#roll {
+#roll,#homeBtn {
   width: 100%;
 }
 

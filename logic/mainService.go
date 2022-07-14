@@ -15,7 +15,7 @@ import (
 var DB *sql.DB
 
 func Roll(w http.ResponseWriter, r *http.Request) {
-	tpl, err := template.ParseFiles("src/rollCard.gohtml")
+	tpl, err := template.ParseFiles("src/rollCard.html")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -27,7 +27,7 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 			consumeRoll(connectedUser)
 			addToInventory(connectedUser, rolledItem)
 			if rolledItem.Rarity == 2 {
-				tpl, err = template.ParseFiles("src/rollRareCard.gohtml")
+				tpl, err = template.ParseFiles("src/rollRareCard.html")
 				if err != nil {
 					log.Fatalln(err)
 				}
@@ -51,7 +51,7 @@ type IndexInfo struct {
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	var indexInfos IndexInfo
-	tpl, err := template.ParseFiles("src/index.gohtml")
+	tpl, err := template.ParseFiles("src/index.html")
 	if err != nil {
 		log.Fatalln(err)
 	}

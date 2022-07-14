@@ -26,6 +26,7 @@ func main() {
 		logic.DataToRoll(db)
 		http.Redirect(w, r, "/", http.StatusAccepted)
 	})
+	http.HandleFunc("/inventory",logic.ShowInventory)
 	http.HandleFunc("/signup", logic.Signup)
 	http.HandleFunc("/signin", logic.Signin)
 	http.HandleFunc("/roll", logic.Roll)

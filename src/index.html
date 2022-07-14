@@ -17,23 +17,23 @@
             {{ else }}
             Connected as : {{ .User.Username }}
             <div id="connected" data-connected=true>
-                <h2>My inventory : </h2>
-                {{ if .Inventory.Cards}}
-                {{ range .Inventory.Cards }}
-                <div>
-                    {{ .Name}} : x{{ .Quantity }}
-                </div>
-                {{end}}
-                {{end}}
+                <a href="/inventory"><button>Inventory</button></a>
             </div>
-                {{end}}
+            {{end}}
         </div>
         <div class="grid-center">
             <h1>Welcome to the HppGacha (Wip)</h1>
             <button id="roll" onclick="roll()">Roll</button>
         </div>
-        <div>
-            if you notice any bug please tag @shaycaith:disqus
+        <div class="grid-right">
+            <p><b>Update 7</b> Better Inventory is out !</p>
+            <p><b>Infos :</b>
+                You get 4 rolls at signup
+                and 1 roll every two hour
+                for a maximum stock of 4
+            </p>
+            <b>if you notice any bug please tag @shaycaith:disqus</b>
+
         </div>
     </div>
     <div id="rolled" class="rollGrid">

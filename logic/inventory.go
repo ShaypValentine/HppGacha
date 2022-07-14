@@ -1,6 +1,10 @@
 package logic
 
-import "log"
+import (
+	"html/template"
+	"log"
+	"net/http"
+)
 
 type Inventory struct {
 	Cards []CardInventory
@@ -31,4 +35,21 @@ func getInventoryForUser(user user) (inventory Inventory) {
 	}
 	inventory.User = user
 	return inventory
+}
+
+func ShowInventory(w http.ResponseWriter, r *http.Request) {
+
+	var indexInfos IndexInfo
+	tpl, err := template.ParseFiles("src/inventory.html")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	connectedUser, exists := getConnectedUser(w, r)
+	indexInfos.User = connectedUser
+	if exists {
+		indexInfos.Inventory = getInventoryForUser(connectedUser)
+		tpl.Execute(w, indexInfos)
+	} else {
+		http.Redirect(w, r, "/", http.StatusFound)
+	}
 }
