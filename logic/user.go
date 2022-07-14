@@ -38,7 +38,7 @@ type UsersInfos struct {
 
 var sessions = map[string]session{}
 
-func addToInventory(connectedUser user, card BannerRoll) {
+func addToInventory(connectedUser UserInfo, card BannerRoll) {
 	cardAlreadyExist := cardExistInInventory(DB, connectedUser.Id, card.Name)
 	if cardAlreadyExist {
 		DB.Exec("UPDATE inventory SET quantity = quantity + 1 where user = ? and cardName = ?", connectedUser.Id, card.Name)
@@ -47,7 +47,7 @@ func addToInventory(connectedUser user, card BannerRoll) {
 	}
 }
 
-func canRoll(user user) bool {
+func canRoll(user UserInfo) bool {
 	var nbrRoll int
 	err := DB.QueryRow("SELECT availableRoll FROM users WHERE id = ?", user.Id).Scan(&nbrRoll)
 	if err != nil {
@@ -114,7 +114,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func consumeRoll(user user) {
+func consumeRoll(user UserInfo) {
 	_, err := DB.Exec("UPDATE users SET availableRoll = availableRoll - 1 WHERE id = ?", user.Id)
 	if err != nil {
 		log.Fatal(err)
@@ -133,4 +133,14 @@ func GetUsersInfos() (infos UsersInfos) {
 		infos.UserInfo = append(infos.UserInfo, userInfo)
 	}
 	return infos
+}
+
+func getRollsForUser(user UserInfo) int {
+	var nbrRoll int
+	err := DB.QueryRow("SELECT availableRoll FROM users WHERE id = ?", user.Id).Scan(&nbrRoll)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return nbrRoll
 }

@@ -45,7 +45,7 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 }
 
 type IndexInfo struct {
-	User      user
+	User      UserInfo
 	Inventory Inventory
 }
 
@@ -59,6 +59,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	indexInfos.User = connectedUser
 	if exists {
 		indexInfos.Inventory = getInventoryForUser(connectedUser)
+		indexInfos.User.Rolls = getRollsForUser(connectedUser)
 	}
 
 	err = tpl.Execute(w, indexInfos)
@@ -96,8 +97,8 @@ func InscriptionPageHandler(w http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func getConnectedUser(w http.ResponseWriter, r *http.Request) (user, bool) {
-	var connectedUser user
+func getConnectedUser(w http.ResponseWriter, r *http.Request) (UserInfo, bool) {
+	var connectedUser UserInfo
 	sessionCookie, err := r.Cookie("session_token")
 	if err == nil {
 		token := sessionCookie.Value

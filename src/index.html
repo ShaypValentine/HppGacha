@@ -23,10 +23,20 @@
         </div>
         <div class="grid-center">
             <h1>Welcome to the HppGacha (Wip)</h1>
+            {{ if .User.Username }}
+            <div>
+                Time before new roll : <span id="timerToRoll"></span>
+            </div>
+            <button id="roll" onclick="roll()">Roll :   <span data-rolls="{{.User.Rolls}}" id="availableRolls">{{.User.Rolls}}</span> </button>
+          
+            {{ else }}
             <button id="roll" onclick="roll()">Roll</button>
+            {{ end }}
         </div>
         <div class="grid-right">
+            <p><b>Update 8</b> Small quality of life update is out !</p>
             <p><b>Update 7</b> Better Inventory is out !</p>
+
             <p><b>Infos :</b>
                 You get 4 rolls at signup
                 and 1 roll every two hour

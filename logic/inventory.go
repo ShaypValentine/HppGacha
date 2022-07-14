@@ -8,7 +8,7 @@ import (
 
 type Inventory struct {
 	Cards []CardInventory
-	User  user
+	User  UserInfo
 }
 
 type CardInventory struct {
@@ -18,7 +18,7 @@ type CardInventory struct {
 	Rarity   int
 }
 
-func getInventoryForUser(user user) (inventory Inventory) {
+func getInventoryForUser(user UserInfo) (inventory Inventory) {
 	var card CardInventory
 	var cardName string
 	rows, err := DB.Query("Select cardName, quantity from inventory where user = ?", user.Id)
