@@ -88,11 +88,19 @@ func LoginPageHandler(w http.ResponseWriter, request *http.Request) {
 	}
 }
 func InscriptionPageHandler(w http.ResponseWriter, request *http.Request) {
+	error := request.URL.Query().Get("error")
+	errorText := ""
+	if error != "" {
+		errorText = "No account with this username was found."
+		if error == "BadCreds" {
+			errorText = "Empty Username or password "
+		}
+	}
 	tpl, err := template.ParseFiles("src/inscriptionForm.html")
 	if err != nil {
 		log.Fatalln(err)
 	}
-	err = tpl.Execute(w, nil)
+	err = tpl.Execute(w, errorText)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -127,6 +135,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	}
 	creds.Username = strings.ToLower(r.PostFormValue("username"))
 	creds.Password = r.PostFormValue("password")
+	if creds.Username != "" && creds.Password != "" {
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -140,7 +149,9 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.Redirect(w, r, "/login", http.StatusFound)
-
+	}
+	http.Redirect(w, r, "/inscription?error=BadCreds", http.StatusFound)
+	return
 }
 
 func Signin(w http.ResponseWriter, r *http.Request) {
