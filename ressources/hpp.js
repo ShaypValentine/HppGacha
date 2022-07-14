@@ -55,6 +55,12 @@ var x = setInterval(function () {
     // If the count down is finished, write some text
     if (countdown < 0) {
         clearInterval(x);
-        document.getElementById("timerToRoll").innerHTML = "NEW ROLL AVAILABLE";
+        let counterAvailableRoll = document.getElementById("availableRolls")
+        let rolls = counterAvailableRoll.dataset.rolls
+        if (rolls < 4) {
+            rolls = rolls +1
+            counterAvailableRoll.innerHTML = rolls;
+            counterAvailableRoll.dataset.rolls = rolls
+        }
     }
 }, 1000);
