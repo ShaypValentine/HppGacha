@@ -48,6 +48,13 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 type IndexInfo struct {
 	User      UserInfo
 	Inventory Inventory
+	TopCollectors []TopCollector
+	MaxCards int
+}
+
+type TopCollector struct {
+	Username string `json:"username" db:"username"`
+	UniqueCard int    `json:"uniqueCard" db:"uniqueCard"`
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -62,6 +69,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		indexInfos.Inventory = getInventoryForUser(connectedUser)
 		indexInfos.User.Rolls = getRollsForUser(connectedUser)
 	}
+
+	indexInfos = getTopCollectors(indexInfos)
 
 	err = tpl.Execute(w, indexInfos)
 	if err != nil {

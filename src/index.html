@@ -27,13 +27,15 @@
             <div>
                 Time before new roll : <span id="timerToRoll"></span>
             </div>
-            <button id="roll" onclick="roll()">Roll :   <span data-rolls="{{.User.Rolls}}" id="availableRolls">{{.User.Rolls}}</span> </button>
-          
+            <button id="roll" onclick="roll()">Roll : <span data-rolls="{{.User.Rolls}}"
+                    id="availableRolls">{{.User.Rolls}}</span> </button>
+
             {{ else }}
             <button id="roll" onclick="roll()">Roll</button>
             {{ end }}
         </div>
         <div class="grid-right">
+            <p><b>Update 9</b> Leaderboard for best collector !</p>
             <p><b>Update 8</b> Small quality of life update is out !</p>
             <p><b>Update 7</b> Better Inventory is out !</p>
 
@@ -43,7 +45,21 @@
                 for a maximum stock of 4
             </p>
             <b>if you notice any bug please tag @shaycaith:disqus</b>
-
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">Best collector based on unique cards obtained</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range .TopCollectors }}
+                    <tr>
+                        <td>{{.Username}}</td>
+                        <td>{{.UniqueCard}} / {{$.MaxCards}}</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
         </div>
     </div>
     <div id="rolled" class="rollGrid">

@@ -10,7 +10,7 @@ function roll() {
             let counterAvailableRoll = document.getElementById("availableRolls")
             let rolls = counterAvailableRoll.dataset.rolls
             if (rolls > 0) {
-                rolls = rolls -1
+                rolls = rolls - 1
                 counterAvailableRoll.innerHTML = rolls;
                 counterAvailableRoll.dataset.rolls = rolls
             }
@@ -39,28 +39,30 @@ const timeToNextRun = (start) => {
     return remainingTime;
 };
 
-var x = setInterval(function () {
-    let now = new Date();
-    let countdown = timeToNextRun(now);
+if (document.getElementById("timerToRoll") != null) {
+    var x = setInterval(function () {
+        let now = new Date();
+        let countdown = timeToNextRun(now);
 
-    // Time calculations for days, hours, minutes and seconds
-    var hours = Math.floor((countdown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((countdown % (1000 * 60)) / 1000);
+        // Time calculations for days, hours, minutes and seconds
+        var hours = Math.floor((countdown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((countdown % (1000 * 60)) / 1000);
 
-    // Display the result in the element with id="demo"
-    document.getElementById("timerToRoll").innerHTML = hours + "h "
-        + minutes + "m " + seconds + "s ";
+        // Display the result in the element with id="demo"
+        document.getElementById("timerToRoll").innerHTML = hours + "h "
+            + minutes + "m " + seconds + "s ";
 
-    // If the count down is finished, write some text
-    if (countdown < 0) {
-        clearInterval(x);
-        let counterAvailableRoll = document.getElementById("availableRolls")
-        let rolls = counterAvailableRoll.dataset.rolls
-        if (rolls < 4) {
-            rolls = rolls +1
-            counterAvailableRoll.innerHTML = rolls;
-            counterAvailableRoll.dataset.rolls = rolls
+        // If the count down is finished, write some text
+        if (countdown < 0) {
+            clearInterval(x);
+            let counterAvailableRoll = document.getElementById("availableRolls")
+            let rolls = counterAvailableRoll.dataset.rolls
+            if (rolls < 4) {
+                rolls = rolls + 1
+                counterAvailableRoll.innerHTML = rolls;
+                counterAvailableRoll.dataset.rolls = rolls
+            }
         }
-    }
-}, 1000);
+    }, 1000);
+}

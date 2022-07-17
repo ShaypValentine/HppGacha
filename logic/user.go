@@ -144,3 +144,23 @@ func getRollsForUser(user UserInfo) int {
 
 	return nbrRoll
 }
+
+func getTopCollectors(infos IndexInfo) IndexInfo {
+	var topCollector TopCollector
+	var maxCards int
+	err := DB.QueryRow("SELECT count(name) FROM rollable_users").Scan(&maxCards)
+	if err != nil {
+		log.Fatal(err)
+	}
+	infos.MaxCards = maxCards
+	rows, err := DB.Query("SELECT username, count(cardName) FROM users INNER JOIN inventory ON inventory.user = users.id GROUP BY username ORDER BY count(cardName) DESC LIMIT 10 ")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for rows.Next() {
+		rows.Scan(&topCollector.Username, &topCollector.UniqueCard)
+		infos.TopCollectors = append(infos.TopCollectors, topCollector)
+	}
+return infos
+}

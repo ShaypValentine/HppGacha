@@ -15,11 +15,13 @@ body {
 .grid-right {
   text-align: center;
 }
+
 .grid-center {
   place-content: center;
 }
 
-#roll,#homeBtn {
+#roll,
+#homeBtn {
   width: 100%;
 }
 
@@ -232,8 +234,22 @@ body {
     transform-origin: center;
 
   }
+
   .imgResize {
     width: 140px;
     height: 130px;
   }
+}
+
+table {
+  border-collapse: collapse;
+  background-color: rgb(243, 233, 221);
+  border: black solid 2px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
+
+thead tr {
+  border-bottom: #040712 solid 2px;
 }
