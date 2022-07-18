@@ -2,6 +2,7 @@ package logic
 
 import (
 	"database/sql"
+	models "hppGacha/src/models"
 	"html/template"
 	"log"
 	"net/http"
@@ -10,50 +11,51 @@ import (
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
-var DB *sql.DB
+var DB *gorm.DB
 
-func Roll(w http.ResponseWriter, r *http.Request) {
-	tpl, err := template.ParseFiles("src/rollCard.html")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	if r.Method == "GET" {
-		w.Header().Set("Content-Type", "application/json")
-		connectedUser, exists := getConnectedUser(w, r)
-		if exists {
-			Refresh(w, r)
-		}
-		if canRoll(connectedUser) {
-			rolledItem := getRandom()
-			consumeRoll(connectedUser)
-			addToInventory(connectedUser, rolledItem)
-			if rolledItem.Rarity == 2 {
-				tpl, err = template.ParseFiles("src/rollRareCard.html")
-				if err != nil {
-					log.Fatalln(err)
-				}
-			}
+//  func Roll(w http.ResponseWriter, r *http.Request) {
+//  	tpl, err := template.ParseFiles("src/rollCard.html")
+//  	if err != nil {
+//  		log.Fatalln(err)
+//  	}
+//  	if r.Method == "GET" {
+//  		w.Header().Set("Content-Type", "application/json")
+//  		connectedUser, exists := getConnectedUser(w, r)
+//  		if exists {
+//  			// Refresh(w, r)
+//  		}
+//  		if canRoll(connectedUser) {
+//  			rolledItem := getRandom()
+//  			consumeRoll(connectedUser)
+//  			addToInventory(connectedUser, rolledItem)
+//  			if rolledItem.Rarity == 2 {
+//  				tpl, err = template.ParseFiles("src/rollRareCard.html")
+//  				if err != nil {
+//  					log.Fatalln(err)
+//  				}
+//  			}
 
-			err = tpl.Execute(w, rolledItem)
-			if err != nil {
-				log.Fatalln(err)
-			}
-		}
-	}
+//  			err = tpl.Execute(w, rolledItem)
+//  			if err != nil {
+//  				log.Fatalln(err)
+//  			}
+//  		}
+//  	}
 
-}
+//  }
 
 type IndexInfo struct {
-	User      UserInfo
-	Inventory Inventory
+	User          models.User
+	Inventory     models.Inventory
 	TopCollectors []TopCollector
-	MaxCards int
+	MaxCards      int64
 }
 
 type TopCollector struct {
-	Username string `json:"username" db:"username"`
+	Username   string `json:"username" db:"username"`
 	UniqueCard int    `json:"uniqueCard" db:"uniqueCard"`
 }
 
@@ -67,7 +69,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	indexInfos.User = connectedUser
 	if exists {
 		indexInfos.Inventory = getInventoryForUser(connectedUser)
-		indexInfos.User.Rolls = getRollsForUser(connectedUser)
 	}
 
 	indexInfos = getTopCollectors(indexInfos)
@@ -115,8 +116,8 @@ func InscriptionPageHandler(w http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func getConnectedUser(w http.ResponseWriter, r *http.Request) (UserInfo, bool) {
-	var connectedUser UserInfo
+func getConnectedUser(w http.ResponseWriter, r *http.Request) (models.User, bool) {
+	var connectedUser models.User
 	sessionCookie, err := r.Cookie("session_token")
 	if err == nil {
 		token := sessionCookie.Value
@@ -127,8 +128,7 @@ func getConnectedUser(w http.ResponseWriter, r *http.Request) (UserInfo, bool) {
 		if userSession.isExpired() {
 			delete(sessions, token)
 		}
-		connectedUser.Username = userSession.username
-		connectedUser.Id = userSession.id
+		DB.First(&connectedUser, userSession.id)
 		return connectedUser, exists
 	}
 	return connectedUser, false
@@ -145,19 +145,20 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	creds.Username = strings.ToLower(r.PostFormValue("username"))
 	creds.Password = r.PostFormValue("password")
 	if creds.Username != "" && creds.Password != "" {
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), 8)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if _, err = DB.Exec("INSERT into users (userName,password) values ($1, $2)", creds.Username, string(hashedPassword)); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	http.Redirect(w, r, "/login", http.StatusFound)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(creds.Password), 8)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var newUser = models.User{Username: creds.Username, Password: string(hashedPassword)}
+		if result := DB.Create(&newUser); result.Error != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			http.Redirect(w, r, "/inscription?error=BadCreds", http.StatusFound)
+		}
+		http.Redirect(w, r, "/login", http.StatusFound)
 	}
 	http.Redirect(w, r, "/inscription?error=BadCreds", http.StatusFound)
 	return
@@ -173,15 +174,12 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 	}
 	creds.Username = strings.ToLower(r.PostFormValue("username"))
 	creds.Password = r.PostFormValue("password")
-
-	result := DB.QueryRow("select id,password from users where username=$1", creds.Username)
-	if err != nil {
+	var user models.User
+	if result := DB.Where("username = ?", creds.Username).First(&user); result.Error != nil {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	storedCreds := &Credentials{}
-	err = result.Scan(&storedCreds.Id, &storedCreds.Password)
 
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -192,7 +190,7 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err = bcrypt.CompareHashAndPassword([]byte(storedCreds.Password), []byte(creds.Password)); err != nil {
+	if err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(creds.Password)); err != nil {
 		http.Redirect(w, r, "/login?error=BadCreds", http.StatusFound)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
@@ -200,9 +198,8 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 	sessionToken := uuid.NewString()
 	expiresAt := time.Now().Add(600 * time.Second)
 	sessions[sessionToken] = session{
-		username: creds.Username,
-		id:       storedCreds.Id,
-		expiry:   expiresAt,
+		id:     int(user.ID),
+		expiry: expiresAt,
 	}
 
 	http.SetCookie(w, &http.Cookie{

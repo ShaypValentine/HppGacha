@@ -1,6 +1,7 @@
 hppgacha.exe
 hppgacha.db
 database.db
+hppgachaOrm.db
 dist/
 temp-pics/*
 !temp-pics/.gitkeep

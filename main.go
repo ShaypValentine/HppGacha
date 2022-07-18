@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	admin "hppGacha/admin"
+	// admin "hppGacha/admin"
 	logic "hppGacha/logic"
+	models "hppGacha/src/models"
 	"log"
 	"net/http"
 	"os"
@@ -12,13 +13,16 @@ import (
 
 func main() {
 	db, err := logic.DatabaseConnection()
+	logic.DB = db
+	db.AutoMigrate(&models.Card{})
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.CardInInventory{})
+
 	if err != nil {
 		fmt.Println(err)
 	}
-	defer db.Close()
 	logic.DataToRoll(db)
 	fileServer := http.FileServer(neuteredFileSystem{http.Dir("./ressources")})
-	// fs := http.FileServer(http.Dir("ressources"))
 	http.Handle("/ressources/", http.StripPrefix("/ressources", fileServer))
 
 	http.HandleFunc("/reload", func(w http.ResponseWriter, r *http.Request) {
@@ -26,18 +30,18 @@ func main() {
 		logic.DataToRoll(db)
 		http.Redirect(w, r, "/", http.StatusAccepted)
 	})
-	http.HandleFunc("/recycle",logic.RecycleCard)
-	http.HandleFunc("/inventory",logic.ShowInventory)
+	// http.HandleFunc("/recycle", logic.RecycleCard)
+	// http.HandleFunc("/inventory", logic.ShowInventory)
 	http.HandleFunc("/signup", logic.Signup)
 	http.HandleFunc("/signin", logic.Signin)
-	http.HandleFunc("/roll", logic.Roll)
+	// http.HandleFunc("/roll", logic.Roll)
 	http.HandleFunc("/login", logic.LoginPageHandler)
 	http.HandleFunc("/inscription", logic.InscriptionPageHandler)
 	http.HandleFunc("/", logic.Index)
-	http.HandleFunc("/adminw", admin.Index)
-	http.HandleFunc("/admin/new_card", admin.NewCard)
-	http.HandleFunc("/admin/show_users", admin.ShowUser)
-	http.HandleFunc("/admin/process_card", admin.ProcessCard)
+	// http.HandleFunc("/adminw", admin.Index)
+	// http.HandleFunc("/admin/new_card", admin.NewCard)
+	// http.HandleFunc("/admin/show_users", admin.ShowUser)
+	// http.HandleFunc("/admin/process_card", admin.ProcessCard)
 	// Launch app on OS PORT var or 8008
 	env := os.Getenv("LOCALENV")
 	if env != "" {

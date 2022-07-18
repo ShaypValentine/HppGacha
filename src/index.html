@@ -27,8 +27,8 @@
             <div>
                 Time before new roll : <span id="timerToRoll"></span>
             </div>
-            <button id="roll" onclick="roll()">Roll : <span data-rolls="{{.User.Rolls}}"
-                    id="availableRolls">{{.User.Rolls}}</span> </button>
+            <button id="roll" onclick="roll()">Roll : <span data-rolls="{{.User.AvailableRolls}}"
+                    id="availableRolls">{{.User.AvailableRolls}}</span> </button>
 
             {{ else }}
             <button id="roll" onclick="roll()">Roll</button>
