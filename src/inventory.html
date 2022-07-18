@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="/ressources/hpp.css?v=0.9">
+    <link rel="stylesheet" href="/ressources/hpp.css?v=0.10">
     <meta charset="UTF-8">
     <title>Hpp Roll </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,10 +13,14 @@
     <img class="imgResize" src="ressources/pics/{{ .Avatar }}" alt="{{.Name}}">
     <div class="container">
         <h4><b>{{ .Name }}</b></h4>
-        
+
     </div>
 </div>
-x {{ .Quantity}}
+x <span id="{{ .Name }}-quantity">{{ .Quantity}}</span>
+{{ if ge .Quantity 4 }}
+<button class="recycle" data-name="{{.Name}}" data-quantity="{{.Quantity}}">Recycle
+    3 for 1 roll </button>
+{{ end }}
 
 {{ end}}
 
@@ -30,9 +34,14 @@ x {{ .Quantity}}
     </div>
 </div>
 x {{ .Quantity}}
+{{ if ge .Quantity 4 }}
+<button class="recycle" data-name="{{.Name}}" data-quantity="{{.Quantity}}">Recycle
+    3 for 1 roll </button>
+{{ end }}
 {{ end }}
 
 <body>
+    <flash-messages data-max-messages="5"></flash-messages>
     <div class="grid">
         <div></div>
         <div class="grid-center">
@@ -61,4 +70,6 @@ x {{ .Quantity}}
         {{end}}
         {{end}}
     </div>
+    <script src="/ressources/flashy.js"></script>
+    <script type="text/javascript" src="/ressources/hpp.js"></script>
 </body>

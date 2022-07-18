@@ -1,4 +1,6 @@
 function roll() {
+    var rollBtn = document.getElementById("roll")
+    rollBtn.disabled = true
     if (isConnectedAndCookieExpired()) {
         window.location.replace(window.location.href);
     } else {
@@ -18,8 +20,62 @@ function roll() {
             console.warn(err)
         })
     }
+    rollBtn.disabled = false;
 }
 
+
+document.addEventListener('click', function (event) {
+
+    // If the clicked element doesn't have the right selector, bail
+    if (!event.target.matches('.recycle')) return;
+    event.preventDefault();
+    recycleTarget = event.target
+    if (recycleTarget !== null) {
+        var quantity = recycleTarget.dataset.quantity;
+        var name = recycleTarget.dataset.name;
+        if (quantity !== undefined && quantity >= 4 && name !== undefined) {
+            data = { quantity: quantity, name: name }
+            fetch("/recycle", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(function (response) {
+                return response.text()
+            }).then(function (data) {
+                obj = JSON.parse(data)
+                if (obj.error_string !== "") {
+                    alert(obj.error_string)
+                } else {
+                    recycleTarget.dataset.quantity = obj.new_quantity
+                    var quantityText = document.getElementById(name + "-quantity")
+                    quantityText.innerHTML = obj.new_quantity
+                    Flashy('flash-messages', {
+                        type: 'success',
+                        title: 'Card recycled',
+                        message: `One roll was added`,
+                        globalClose: true,
+                        expiry: 5000,
+                        styles: {
+                            icon: {
+                                type: 'unicode',
+                                val: '💬'
+                            }
+                        }
+                    });
+                    if (obj.new_quantity < 4) {
+                        recycleTarget.remove()
+                    }
+                }
+            }).catch(function (err) {
+                console.warn(err)
+            })
+        }
+    }
+}, false);
+
+  
 function isConnectedAndCookieExpired() {
     var elemConnect = document.getElementById("connected")
     if (elemConnect !== null) {

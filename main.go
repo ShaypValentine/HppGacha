@@ -26,6 +26,7 @@ func main() {
 		logic.DataToRoll(db)
 		http.Redirect(w, r, "/", http.StatusAccepted)
 	})
+	http.HandleFunc("/recycle",logic.RecycleCard)
 	http.HandleFunc("/inventory",logic.ShowInventory)
 	http.HandleFunc("/signup", logic.Signup)
 	http.HandleFunc("/signin", logic.Signin)
@@ -40,7 +41,7 @@ func main() {
 	// Launch app on OS PORT var or 8008
 	env := os.Getenv("LOCALENV")
 	if env != "" {
-		if err := http.ListenAndServe(":80", nil); err != nil {
+		if err := http.ListenAndServe(":8008", nil); err != nil {
 			log.Fatal(err)
 		}
 	} else {

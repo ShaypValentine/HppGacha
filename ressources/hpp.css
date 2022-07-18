@@ -180,6 +180,10 @@ body {
 
 
 @media (max-width: 480px) {
+  .grid {
+    display: grid;
+    grid-template-columns:auto;
+  }
   .rollGrid {
     display: grid;
     grid-template-columns: repeat(2, auto);
@@ -252,4 +256,7 @@ table {
 
 thead tr {
   border-bottom: #040712 solid 2px;
+}
+.flash-message{
+  display:none;
 }
