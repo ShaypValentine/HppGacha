@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
-	admin "hppGacha/admin"
-	logic "hppGacha/logic"
+	admin "hppGacha/src/admin"
+	logic "hppGacha/src/logic"
+	models "hppGacha/src/models"
 	"log"
 	"net/http"
 	"os"
@@ -13,21 +13,25 @@ import (
 func main() {
 	db, err := logic.DatabaseConnection()
 	if err != nil {
-		fmt.Println(err)
+		log.Panic(err)
 	}
-	defer db.Close()
+	logic.DB = db
+	admin.DB = db
+	db.AutoMigrate(&models.Card{})
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.CardInInventory{})
+
 	logic.DataToRoll(db)
-	fileServer := http.FileServer(neuteredFileSystem{http.Dir("./ressources")})
-	// fs := http.FileServer(http.Dir("ressources"))
+	fileServer := http.FileServer(neuteredFileSystem{http.Dir("src/ressources")})
 	http.Handle("/ressources/", http.StripPrefix("/ressources", fileServer))
 
 	http.HandleFunc("/reload", func(w http.ResponseWriter, r *http.Request) {
 		logic.EmptyEntries()
 		logic.DataToRoll(db)
-		http.Redirect(w, r, "/", http.StatusAccepted)
+		http.Redirect(w, r, "/", http.StatusFound)
 	})
-	http.HandleFunc("/recycle",logic.RecycleCard)
-	http.HandleFunc("/inventory",logic.ShowInventory)
+	http.HandleFunc("/recycle", logic.RecycleCard)
+	http.HandleFunc("/inventory", logic.ShowInventory)
 	http.HandleFunc("/signup", logic.Signup)
 	http.HandleFunc("/signin", logic.Signin)
 	http.HandleFunc("/roll", logic.Roll)
@@ -42,11 +46,11 @@ func main() {
 	env := os.Getenv("LOCALENV")
 	if env != "" {
 		if err := http.ListenAndServe(":8008", nil); err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	} else {
 		if err := http.ListenAndServeTLS(":443", "/etc/letsencrypt/live/hppgacha.art/fullchain.pem", "/etc/letsencrypt/live/hppgacha.art/privkey.pem", nil); err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 }

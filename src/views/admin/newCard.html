@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HppGacha Admin</title>
+    <link rel="stylesheet" href="/ressources/css/admin.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <ul>
+        <li><a href="/admin">Home</a></li>
+        <li><a class="active" href="/admin/new_card">New card</a></li>
+        <li><a href="/admin/show_users">See users</a></li>
+    </ul>
+    <div class="side">
+        <form action="/admin/process_card" method="POST" enctype="multipart/form-data">
+            <input placeholder="Card name" name="cardName" type="text" />
+            <input placeholder="Weight 1 - 50" name="weight" type="number" />
+            <input placeholder="Rarity 1 - 2 " name="rarity" type="number" />
+            <input placeholder="Card Image" name="cardImage" type="file" />
+            <input type="submit" />
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+{{ define "card"}}
+<div class="card">
+ <img class="imgResize" src ="ressources/pics/{{ .Avatar }}" alt="{{.Cardname}}">
+    <div class="container">
+        <h4><b>{{ .Cardname }}</b></h4>
+    </div>
+</div>
+{{ end }}
+
+{{define "rareCard"}}
+<div class="rare-card-container">
+    <div class="rare-card">
+        <img class="imgResize" src="ressources/pics/{{ .Avatar }}" alt="{{.Cardname}}">
+    </div>
+    <div class="rare-container">
+        <b>{{.Cardname}}</b>
+    </div>
+</div>
+{{end}}
+
+{{if eq .Rarity 2}}
+{{template "rareCard" . }}
+{{else}}
+{{template "card" .}}
+{{end}}

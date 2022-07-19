@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/ressources/css/hpp.css?v=0.10">
+    <meta charset="UTF-8">
+    <title>Hpp Roll </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="grid">
+        <div class="grid-left">
+            {{ if not .User.Username }}
+            <a id="connected" data-guest="true" href="/login"><button>Login</button></a>
+            <a href="/inscription"><button>Sign up</button></a>
+            {{ else }}
+            Connected as : {{ .User.Username }}
+            <div id="connected" data-connected=true>
+                <a href="/inventory"><button>Inventory</button></a>
+            </div>
+            {{end}}
+        </div>
+        <div class="grid-center">
+            <h1>Welcome to the HppGacha (Wip)</h1>
+            {{ if .User.Username }}
+            <div>
+                Time before new roll : <span id="timerToRoll"></span>
+            </div>
+            <button id="roll" onclick="roll()">Roll : <span data-rolls="{{.User.AvailableRolls}}"
+                    id="availableRolls">{{.User.AvailableRolls}}</span> </button>
+
+            {{ else }}
+            <button id="roll" onclick="roll()">Roll</button>
+            {{ end }}
+        </div>
+        <div class="grid-right">
+            <p><b>Update 10</b> Leaderboard for best collector is out !</p>
+            <p><b>Update 9</b> Leaderboard for best collector is out !</p>
+            <p><b>Update 8</b> Small quality of life update is out !</p>
+            <p><b>Update 7</b> Better Inventory is out !</p>
+
+            <p><b>Infos :</b>
+                You get 4 rolls at signup
+                and 1 roll every two hour
+                for a maximum stock of 4
+            </p>
+            <b>if you notice any bug please tag @shaycaith:disqus</b>
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">Best collector based on unique cards obtained</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{ range .TopCollectors }}
+                    <tr>
+                        <td>{{.Username}}</td>
+                        <td>{{.UniqueCard}} / {{$.MaxCards}}</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="rolled" class="rollGrid">
+    </div>
+
+    <script type="text/javascript" src="/ressources/js/hpp.js"></script>
+</body>
+
+</html>
