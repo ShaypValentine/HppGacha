@@ -23,7 +23,7 @@ func init() {
 var accumulatedWeight uint
 var entries []Entry
 
-func addEntry(card models.Card) {
+func AddEntry(card models.Card) {
 	var entry Entry
 	entry.Card = card
 	accumulatedWeight += card.Weight
@@ -31,15 +31,15 @@ func addEntry(card models.Card) {
 	entries = append(entries, entry)
 }
 
-// func getRandom() Entry {
-// 	r := rand.Intn(1 * int(accumulatedWeight))
-// 	for _, entry := range entries {
-// 		if int(entry.AccumulatedWeight) >= r {
-// 			return entry
-// 		}
-// 	}
-// 	return Entry{}
-// }
+func getRandom() Entry {
+	r := rand.Intn(1 * int(accumulatedWeight))
+	for _, entry := range entries {
+		if int(entry.AccumulatedWeight) >= r {
+			return entry
+		}
+	}
+	return Entry{}
+}
 
 func EmptyEntries() {
 	entries = nil
@@ -47,7 +47,7 @@ func EmptyEntries() {
 }
 
 func DatabaseConnection() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open("hppgachaOrm.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("hppgacha.db"), &gorm.Config{})
 	return db, err
 }
 
@@ -55,6 +55,6 @@ func DataToRoll(db *gorm.DB) {
 	var cards []models.Card
 	_ = db.Find(&cards)
 	for _, card := range cards {
-		addEntry(card)
+		AddEntry(card)
 	}
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="/ressources/hpp.css?v=0.10">
+    <link rel="stylesheet" href="/ressources/css/hpp.css?v=0.10">
     <meta charset="UTF-8">
     <title>Hpp Roll </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,15 +10,15 @@
 
 {{ define "card"}}
 <div class="card">
-    <img class="imgResize" src="ressources/pics/{{ .Avatar }}" alt="{{.Name}}">
+    <img class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
     <div class="container">
-        <h4><b>{{ .Name }}</b></h4>
+        <h4><b>{{ .Card.Cardname }}</b></h4>
 
     </div>
 </div>
-x <span id="{{ .Name }}-quantity">{{ .Quantity}}</span>
+x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
 {{ if ge .Quantity 4 }}
-<button class="recycle" data-name="{{.Name}}" data-quantity="{{.Quantity}}">Recycle
+<button class="recycle" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Recycle
     3 for 1 roll </button>
 {{ end }}
 
@@ -27,15 +27,15 @@ x <span id="{{ .Name }}-quantity">{{ .Quantity}}</span>
 {{ define "rareCard" }}
 <div class="rare-card-container">
     <div class="rare-card">
-        <img class="imgResize" src="ressources/pics/{{ .Avatar }}" alt="{{.Name}}">
+        <img class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
     </div>
     <div class="rare-container">
-        <b>{{.Name}}</b>
+        <b>{{.Card.Cardname}}</b>
     </div>
 </div>
-x {{ .Quantity}}
+x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
 {{ if ge .Quantity 4 }}
-<button class="recycle" data-name="{{.Name}}" data-quantity="{{.Quantity}}">Recycle
+<button class="recycle" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Recycle
     3 for 1 roll </button>
 {{ end }}
 {{ end }}
@@ -45,11 +45,11 @@ x {{ .Quantity}}
     <div class="grid">
         <div></div>
         <div class="grid-center">
-            {{ if not .User.Username }}
+            {{ if not .Username }}
             <a href="/login"><button>Login</button></a>
             <a href="/inscription"><button>Sign up</button></a>
             {{ else }}
-            Connected as : {{ .User.Username }}
+            Connected as : {{ .Username }}
             <div id="connected" data-connected=true>
                 <a href="/"><button id="homeBtn">Home</button></a>
                 <h2>My inventory : </h2>
@@ -58,10 +58,10 @@ x {{ .Quantity}}
         </div>
     </div>
     <div id="rolled" class="rollGrid">
-        {{ if .Inventory.Cards}}
-        {{ range .Inventory.Cards }}
+        {{ if .CardsInInventory}}
+        {{ range .CardsInInventory }}
         <div>
-            {{ if eq .Rarity 2}}
+            {{ if eq .Card.Rarity 2}}
             {{ template "rareCard" .}}
             {{ else }}
             {{ template "card" . }}
@@ -70,6 +70,6 @@ x {{ .Quantity}}
         {{end}}
         {{end}}
     </div>
-    <script src="/ressources/flashy.js"></script>
-    <script type="text/javascript" src="/ressources/hpp.js"></script>
+    <script src="/ressources/js/flashy.js"></script>
+    <script type="text/javascript" src="/ressources/js/hpp.js"></script>
 </body>

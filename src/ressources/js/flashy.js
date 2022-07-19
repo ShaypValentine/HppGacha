@@ -177,7 +177,6 @@ var Flashy = (function () {
   }
 
   window.onload = function () {
-    console.log('flashy');
     var style = document.createElement('style');
     style.textContent = "\n        flash-messages {\n            position: fixed;\n            display: flex;\n            flex-wrap: wrap;\n            left: 10px;\n            bottom: 0px;\n            width: 17%;\n            font-family: sans-serif;\n            min-width: 300px;\n            min-height: 100px;\n        }\n    ";
     document.querySelector('body').appendChild(style);

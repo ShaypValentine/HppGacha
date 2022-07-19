@@ -4,21 +4,31 @@ function roll() {
     if (isConnectedAndCookieExpired()) {
         window.location.replace(window.location.href);
     } else {
-        fetch('/roll').then(function (response) {
-            return response.text()
-        }).then(function (html) {
-            let rolled = document.getElementById("rolled")
-            rolled.innerHTML = html + rolled.innerHTML;
-            let counterAvailableRoll = document.getElementById("availableRolls")
-            let rolls = counterAvailableRoll.dataset.rolls
-            if (rolls > 0) {
-                rolls = rolls - 1
-                counterAvailableRoll.innerHTML = rolls;
-                counterAvailableRoll.dataset.rolls = rolls
-            }
-        }).catch(function (err) {
-            console.warn(err)
-        })
+        let rolls = 0
+        let counterAvailableRoll = ""
+        isGuest = document.getElementById("connected").dataset.guest
+        if (isGuest != undefined || !isGuest) {
+            counterAvailableRoll = document.getElementById("availableRolls")
+            rolls = counterAvailableRoll.dataset.rolls
+        }
+        if (rolls > 0 || isGuest) {
+            fetch('/roll').then(function (response) {
+                return response.text()
+            }).then(function (html) {
+                let rolled = document.getElementById("rolled")
+                rolled.innerHTML = html + rolled.innerHTML;
+                if (isGuest != undefined || !isGuest) {
+
+                    if (rolls > 0) {
+                        rolls = rolls - 1
+                        counterAvailableRoll.innerHTML = rolls;
+                        counterAvailableRoll.dataset.rolls = rolls
+                    }
+                }
+            }).catch(function (err) {
+                console.warn(err)
+            })
+        }
     }
     rollBtn.disabled = false;
 }
@@ -32,9 +42,9 @@ document.addEventListener('click', function (event) {
     recycleTarget = event.target
     if (recycleTarget !== null) {
         var quantity = recycleTarget.dataset.quantity;
-        var name = recycleTarget.dataset.name;
-        if (quantity !== undefined && quantity >= 4 && name !== undefined) {
-            data = { quantity: quantity, name: name }
+        var id = recycleTarget.dataset.id;
+        if (quantity !== undefined && quantity >= 4 && id !== undefined) {
+            data = { id: id }
             fetch("/recycle", {
                 method: "POST",
                 headers: {
@@ -49,7 +59,7 @@ document.addEventListener('click', function (event) {
                     alert(obj.error_string)
                 } else {
                     recycleTarget.dataset.quantity = obj.new_quantity
-                    var quantityText = document.getElementById(name + "-quantity")
+                    var quantityText = document.getElementById(id + "-quantity")
                     quantityText.innerHTML = obj.new_quantity
                     Flashy('flash-messages', {
                         type: 'success',
@@ -75,7 +85,7 @@ document.addEventListener('click', function (event) {
     }
 }, false);
 
-  
+
 function isConnectedAndCookieExpired() {
     var elemConnect = document.getElementById("connected")
     if (elemConnect !== null) {
@@ -105,11 +115,9 @@ if (document.getElementById("timerToRoll") != null) {
         var minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((countdown % (1000 * 60)) / 1000);
 
-        // Display the result in the element with id="demo"
         document.getElementById("timerToRoll").innerHTML = hours + "h "
             + minutes + "m " + seconds + "s ";
 
-        // If the count down is finished, write some text
         if (countdown < 0) {
             clearInterval(x);
             let counterAvailableRoll = document.getElementById("availableRolls")

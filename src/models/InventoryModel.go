@@ -5,7 +5,9 @@ import "gorm.io/gorm"
 type CardInInventory struct {
 	gorm.Model
 	UserID   uint
+	User     User
 	CardID   uint
+	Card     Card
 	Quantity uint
 }
 
