@@ -14,7 +14,7 @@ type recycleResponse struct {
 }
 
 type recycleTarget struct {
-	RecycleTargetId uint `json:"recycle_target_id" db:"recycle_target"`
+	RecycleTargetId uint `json:"id,string" db:"id"`
 }
 
 func ShowInventory(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +44,7 @@ func RecycleCard(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Panicln(err)
 		}
-		DB.First(&targetedCard, recycleTarget)
+		DB.First(&targetedCard, recycleTarget.RecycleTargetId)
 		connectedUser, exists := getConnectedUser(w, r)
 		if exists {
 			response.NewQuantity, response.ErrorString = consumeDoublonForRoll(connectedUser, targetedCard)
