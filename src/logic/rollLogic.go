@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"log"
 	"math/rand"
 	"time"
 
@@ -53,7 +54,10 @@ func DatabaseConnection() (*gorm.DB, error) {
 
 func DataToRoll(db *gorm.DB) {
 	var cards []models.Card
-	_ = db.Find(&cards)
+	err := db.Find(&cards).Error
+	if err != nil {
+		log.Panic(err)
+	}
 	for _, card := range cards {
 		AddEntry(card)
 	}

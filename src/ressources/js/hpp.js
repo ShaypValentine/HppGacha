@@ -7,17 +7,18 @@ function roll() {
         let rolls = 0
         let counterAvailableRoll = ""
         isGuest = document.getElementById("connected").dataset.guest
-        if (isGuest != undefined || !isGuest) {
+        isConnected = document.getElementById("connected").dataset.connected;
+        if (isGuest == undefined && isConnected) {
             counterAvailableRoll = document.getElementById("availableRolls")
             rolls = counterAvailableRoll.dataset.rolls
         }
-        if (rolls > 0 || isGuest) {
+        if (rolls > 0 || isGuest ) {
             fetch('/roll').then(function (response) {
                 return response.text()
             }).then(function (html) {
                 let rolled = document.getElementById("rolled")
                 rolled.innerHTML = html + rolled.innerHTML;
-                if (isGuest != undefined || !isGuest) {
+                if (isGuest == undefined && isConnected) {
 
                     if (rolls > 0) {
                         rolls = rolls - 1
