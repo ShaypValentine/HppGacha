@@ -73,7 +73,7 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newSessionToken := uuid.NewString()
-	expiresAt := time.Now().Add(86400 * time.Second)
+	expiresAt := time.Now().Add(864000 * time.Second)
 
 	sessions[newSessionToken] = session{
 		id:     userSession.id,
