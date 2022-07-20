@@ -1,16 +1,8 @@
-<head>
-    <link rel="stylesheet" href="/ressources/css/hpp.css?v=0.10">
-    <meta charset="UTF-8">
-    <title>Hpp Roll </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+{{ template "head"}}
 
 <body>
+    {{ template "navbar_login"}}
     <div class="grid">
-        <div>
-            <a href="/"><button>Home</button></a>
-            <a href="/inscription"><button>Signup</button></a>
-        </div>
         <div>
             <h1>Login</h1>
             <form method="post" action="/signin">
@@ -25,6 +17,7 @@
         <h2 class="error-login">
             {{.}}
         </h2>
-    {{ end }}
+        {{ end }}
+        {{ template "js"}}
     </div>
 </body>

@@ -18,7 +18,11 @@ type recycleTarget struct {
 }
 
 func ShowInventory(w http.ResponseWriter, r *http.Request) {
-	tpl, err := template.ParseFiles("src/views/inventory.html")
+	tpl, err := template.ParseFiles(
+		templatePath+"inventory.html",
+		templatePath+"navbar.html",
+		templatePath+"_parts/head.html",
+		templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panic(err)
 	}

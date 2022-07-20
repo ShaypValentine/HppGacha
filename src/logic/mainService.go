@@ -19,6 +19,7 @@ var ErrorString = map[string]string{
 	"UserExist": "An user already exist with this username",
 	"NoUser":    "No account exists with this username",
 }
+var templatePath = "src/views/"
 
 type IndexInfo struct {
 	User          models.User
@@ -34,7 +35,11 @@ type TopCollector struct {
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	var indexInfos IndexInfo
-	tpl, err := template.ParseFiles("src/views/index.html")
+	tpl, err := template.ParseFiles(
+		templatePath+"index.html",
+		templatePath+"navbar.html",
+		templatePath+"_parts/head.html",
+		templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -78,7 +83,10 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 func LoginPageHandler(w http.ResponseWriter, request *http.Request) {
 	errorGet := request.URL.Query().Get("error")
 	errorText := ErrorString[errorGet]
-	tpl, err := template.ParseFiles("src/views/loginForm.html")
+	tpl, err := template.ParseFiles(templatePath+"loginForm.html",
+	templatePath+"navbar.html",
+	templatePath+"_parts/head.html",
+	templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -90,7 +98,10 @@ func LoginPageHandler(w http.ResponseWriter, request *http.Request) {
 func InscriptionPageHandler(w http.ResponseWriter, request *http.Request) {
 	errorGet := request.URL.Query().Get("error")
 	errorText := ErrorString[errorGet]
-	tpl, err := template.ParseFiles("src/views/inscriptionForm.html")
+	tpl, err := template.ParseFiles(templatePath+"inscriptionForm.html",
+	templatePath+"navbar.html",
+	templatePath+"_parts/head.html",
+	templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panicln(err)
 	}
