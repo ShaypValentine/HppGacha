@@ -2,15 +2,15 @@
 
 <body>
     {{ template "navbar_login"}}
-    <div class="grid">
+    <div class="uk-position-center">
         <div>
             <h1>Login</h1>
             <form method="post" action="/signin">
                 <label for="username">User name</label>
-                <input required="required" type="text" id="username" name="username">
+                <input class="uk-input" required="required" type="text" id="username" name="username">
                 <label for="password">Password</label>
-                <input required="required" type="password" id="password" name="password">
-                <button type="submit">Login</button>
+                <input class="uk-input" required="required" type="password" id="password" name="password">
+                <button class="uk-margin-small-top uk-button uk-button-secondary" type="submit">Login</button>
             </form>
         </div>
         {{ if .}}
@@ -18,6 +18,8 @@
             {{.}}
         </h2>
         {{ end }}
-        {{ template "js"}}
     </div>
+
+        {{ template "footer"}}
+        {{ template "js"}}
 </body>

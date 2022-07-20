@@ -17,6 +17,14 @@ function roll() {
                 return response.text()
             }).then(function (html) {
                 let rolled = document.getElementById("rolled")
+                let cards =  document.getElementsByClassName("cardcount")
+                if(cards.length >= 8){
+                    var lastEle = cards[ cards.length-1 ];
+                    if(lastEle !== undefined){
+                        lastEle.remove()
+
+                    }
+                }
                 rolled.innerHTML = html + rolled.innerHTML;
                 if (isGuest == undefined && isConnected) {
 

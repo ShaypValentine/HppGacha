@@ -1,22 +1,26 @@
 {{ template "head"}}
+
 <body>
     {{ template "navbar_signup"}}
-    <div class="grid">
+    <div class="uk-position-center">
         <div>
             <h1>Inscription</h1>
             <form method="post" action="/signup">
                 <label for="username">User name</label>
-                <input required="required" type="text" minlength="3" type="text" id="username" name="username">
+                <input class="uk-input	" required="required" type="text" minlength="3" type="text" id="username"
+                    name="username">
                 <label for="password">Password</label>
-                <input required="required" minlength="3"  type="password" id="password" name="password">
-                <button type="submit">Submit</button>
+                <input class="uk-input" required="required" minlength="3" type="password" id="password" name="password">
+                <button class="uk-margin-small-top uk-button uk-button-secondary" type="submit">Submit</button>
             </form>
         </div>
         {{ if .}}
         <h2 class="error-login">
             {{.}}
         </h2>
-    {{ end }}
+        {{ end }}
     </div>
+
+    {{template "footer"}}
     {{ template "js"}}
 </body>

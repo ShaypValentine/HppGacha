@@ -39,6 +39,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		templatePath+"index.html",
 		templatePath+"navbar.html",
 		templatePath+"_parts/head.html",
+		templatePath+"_parts/footer.html",
 		templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panicln(err)
@@ -86,6 +87,7 @@ func LoginPageHandler(w http.ResponseWriter, request *http.Request) {
 	tpl, err := template.ParseFiles(templatePath+"loginForm.html",
 	templatePath+"navbar.html",
 	templatePath+"_parts/head.html",
+	templatePath+"_parts/footer.html",
 	templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panic(err)
@@ -101,6 +103,7 @@ func InscriptionPageHandler(w http.ResponseWriter, request *http.Request) {
 	tpl, err := template.ParseFiles(templatePath+"inscriptionForm.html",
 	templatePath+"navbar.html",
 	templatePath+"_parts/head.html",
+	templatePath+"_parts/footer.html",
 	templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panicln(err)

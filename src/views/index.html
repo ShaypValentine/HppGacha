@@ -16,26 +16,36 @@
 
                 Time before new roll : <span id="timerToRoll"></span>
             </div>
-            <button id="roll" onclick="roll()">Roll : <span data-rolls="{{.User.AvailableRolls}}"
-                    id="availableRolls">{{.User.AvailableRolls}}</span> </button>
+            <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="roll()">Roll : <span
+                    data-rolls="{{.User.AvailableRolls}}" id="availableRolls">{{.User.AvailableRolls}}</span> </button>
 
             {{ else }}
-            <button id="roll" onclick="roll()">Roll</button>
+            <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="roll()">Roll</button>
             {{ end }}
         </div>
         <div class="grid-right">
+
+        </div>
+    </div>
+    <div id="rolled" class="rollGrid">
+    </div>
+    <div class="uk-text-center uk-child-width-1-2@s uk-margin-small-bottom" uk-grid="masonry: true">
+        <div>
             <p><b>Update 10</b> Recycling cards is out !</p>
             <p><b>Update 9</b> Leaderboard for best collector is out !</p>
             <p><b>Update 8</b> Small quality of life update is out !</p>
             <p><b>Update 7</b> Better Inventory is out !</p>
+        </div>
+        <div>
 
             <p><b>Infos :</b>
                 You get 4 rolls at signup
                 and 1 roll every two hour
                 for a maximum stock of 4
             </p>
-            <b>if you notice any bug please tag @shaycaith:disqus</b>
-            <table>
+        </div>
+        <div>
+            <table class="uk-margin-auto uk-table-small  uk-table-striped uk-light">
                 <thead>
                     <tr>
                         <th colspan="2">Best collector based on unique cards obtained</th>
@@ -51,18 +61,19 @@
                 </tbody>
             </table>
         </div>
+        <div>
+            <div class="strawpoll-embed" id="strawpoll_GeZANJAAbyV"
+            style="height: 900px; max-width: 640px; width: 100%; margin: 0 auto; display: flex; flex-direction: column;">
+            <iframe title="StrawPoll Embed" src="https://strawpoll.com/embed/polls/GeZANJAAbyV"
+                style="position: static; visibility: visible; display: block; width: 100%; flex-grow: 1;" frameborder="0"
+                allowfullscreen allowtransparency>Loading...</iframe>
+            <script async src="https://cdn.strawpoll.com/dist/widgets.js" charset="utf-8"></script>
+        </div>
+        </div>
     </div>
-    <div id="rolled" class="rollGrid">
-    </div>
-    <div class="strawpoll-embed" id="strawpoll_GeZANJAAbyV"
-        style="height: 900px; max-width: 640px; width: 100%; margin: 0 auto; display: flex; flex-direction: column;">
-        <iframe title="StrawPoll Embed" src="https://strawpoll.com/embed/polls/GeZANJAAbyV"
-            style="position: static; visibility: visible; display: block; width: 100%; flex-grow: 1;" frameborder="0"
-            allowfullscreen allowtransparency>Loading...</iframe>
-        <script async src="https://cdn.strawpoll.com/dist/widgets.js" charset="utf-8"></script>
-    </div>
-    {{ template "js"}}
 
+    {{template "footer"}}
+    {{ template "js"}}
 </body>
 
 </html>

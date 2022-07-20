@@ -1,5 +1,5 @@
 {{ define "card"}}
-<div class="card">
+<div class="card cardcount">
  <img class="imgResize" src ="ressources/pics/{{ .Avatar }}" alt="{{.Cardname}}">
     <div class="container">
         <h4><b>{{ .Cardname }}</b></h4>
@@ -8,7 +8,7 @@
 {{ end }}
 
 {{define "rareCard"}}
-<div class="rare-card-container">
+<div class="rare-card-container cardcount">
     <div class="rare-card">
         <img class="imgResize" src="ressources/pics/{{ .Avatar }}" alt="{{.Cardname}}">
     </div>

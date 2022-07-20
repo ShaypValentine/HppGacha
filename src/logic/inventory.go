@@ -22,6 +22,7 @@ func ShowInventory(w http.ResponseWriter, r *http.Request) {
 		templatePath+"inventory.html",
 		templatePath+"navbar.html",
 		templatePath+"_parts/head.html",
+		templatePath+"_parts/footer.html",
 		templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panic(err)
