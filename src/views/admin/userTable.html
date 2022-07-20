@@ -23,11 +23,11 @@
                 </tr>
             </thead>
             <tbody>
-                {{ if .UserInfo}}
-                {{ range .UserInfo}}
+                {{ if .}}
+                {{ range .}}
                 <tr>
                     <td>{{ .Username }}</td>
-                    <td>{{ .Rolls }}</td>
+                    <td>{{ .AvailableRolls }}</td>
                     <td><button>+</button></td>
                 </tr>
                 {{end}}
