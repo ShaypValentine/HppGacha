@@ -183,7 +183,7 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login?error=BadCreds", http.StatusFound)
 	}
 	sessionToken := uuid.NewString()
-	expiresAt := time.Now().Add(864000 * time.Second)
+	expiresAt := time.Now().Add(240 * time.Hour)
 	sessions[sessionToken] = session{
 		id:     int(user.ID),
 		expiry: expiresAt,
