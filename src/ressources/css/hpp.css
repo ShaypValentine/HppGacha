@@ -256,3 +256,7 @@ table {
   background-color: rgba(100, 100, 100, 0.33);
   ;
 }
+.uk-subnav-pill>.uk-active>a {
+  background-color: #000000;
+  color: #fff;
+}
