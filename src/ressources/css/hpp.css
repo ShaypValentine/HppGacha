@@ -73,7 +73,6 @@ body {
   align-items: center;
 }
 
-
 .rare-card-container {
   margin-top: 10px;
   height: 244px;
@@ -82,7 +81,28 @@ body {
 
 }
 
-.rare-card {
+.rare-card-container-inventory {
+  margin-top: 10px;
+  height: 244px;
+  display: grid;
+  width: 180px;
+  margin-top: 10px;
+  height: 244px;
+  display: grid;
+  width: 180px;
+  transition: 0.3s;
+  background-color: #f6feff;
+  box-shadow:
+    -5px -5px 5px -5px var(--color1),
+    5px 5px 5px -5px var(--color2),
+    -7px -7px 10px -5px transparent,
+    7px 7px 10px -5px transparent,
+    0 0 5px 0px rgba(255, 255, 255, 0),
+    0 8px 16px -20px rgba(0, 0, 0, 0.5);
+}
+
+.rare-card,
+.rare-card-inventory {
   width: 180px;
   height: 170px;
   position: relative;
@@ -104,7 +124,8 @@ body {
 
 }
 
-.flip-card-front-rare:hover {
+.flip-card-front-rare:hover,
+.rare-card-container-inventory:hover {
   box-shadow:
     -20px -20px 30px -25px var(--color1),
     20px 20px 30px -25px var(--color2),
@@ -116,7 +137,9 @@ body {
 
 
 .flip-card-front-rare:before,
-.flip-card-front-rare:after {
+.flip-card-front-rare:after,
+.rare-card-inventory:before,
+.rare-card-inventory:after {
   content: "";
   position: absolute;
   left: 0;
@@ -129,7 +152,8 @@ body {
   transition: all .33s ease;
 }
 
-.flip-card-front-rare:before {
+.flip-card-front-rare:before,
+.rare-card-inventory:before {
   background-position: 50% 50%;
   background-size: 300% 300%;
   background-image: linear-gradient(115deg,
@@ -144,7 +168,8 @@ body {
   z-index: 1;
 }
 
-.flip-card-front-rare:after {
+.flip-card-front-rare:after,
+.rare-card-inventory:after {
   opacity: 1;
   background-image: url("/ressources/pics/sparkles.gif"),
     url("/ressources/pics/holo.webp"),
@@ -177,10 +202,12 @@ body {
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
-.flip-card-front,.flip-card-front-rare, .flip-card-back {
+.flip-card-front,
+.flip-card-front-rare,
+.flip-card-back {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -193,6 +220,7 @@ body {
   color: black;
   transform: rotateY(180deg);
 }
+
 .flip-card-front-rare {
   color: black;
   transform: rotateY(180deg);
@@ -278,12 +306,14 @@ body {
   :not(.uk-offcanvas-flip).uk-offcanvas-container-animation {
     left: 110px;
   }
+
   .flip-card {
     background-color: transparent;
     width: 140px;
     height: 222px;
     perspective: 1000px;
   }
+
   .flip-card-back {
     background: url("/ressources/pics/cardbackmobile.png");
     color: black;
@@ -299,6 +329,7 @@ table {
   background-color: rgba(100, 100, 100, 0.33);
   ;
 }
+
 .uk-subnav-pill>.uk-active>a {
   background-color: #000000;
   color: #fff;

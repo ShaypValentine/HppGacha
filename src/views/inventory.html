@@ -21,8 +21,8 @@
 
 {{ define "rareCard" }}
 <div class="tag-rare" data-name="{{.Card.Cardname}}" data-quantity="{{.Quantity}}">
-    <div class="rare-card-container">
-        <div class="rare-card">
+    <div class="rare-card-container-inventory">
+        <div class="rare-card-inventory">
             <img class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
         </div>
         <div class="rare-container">
@@ -49,24 +49,24 @@
     </div>
     </div>
     <div id="rolled" style="min-height:650px" uk-filter="target: .card-filter">
-        <div class="uk-grid-medium uk-margin-auto uk-grid-divider  uk-child-width-auto"  uk-grid>
+        <div class="uk-grid-medium  uk-margin-auto uk-grid-divider  uk-child-width-auto" uk-grid>
             <ul class="uk-subnav uk-subnav-pill">
                 <li uk-filter-control><a href="#">All</a></li>
                 <li uk-filter-control="filter:.tag-rare;group:rarity"><a href="#">Rare</a></li>
                 <li uk-filter-control="filter:.tag-common;group:rarity"><a href="#">Common</a></li>
             </ul>
-            <ul class="uk-subnav uk-subnav-pill">   
+            <ul class="uk-subnav uk-subnav-pill">
                 <li class="uk-active" uk-filter-control="sort:data-name"><a href="#">Name A - Z</a></li>
                 <li uk-filter-control="sort:data-name;order:desc;"><a href="#">Name Z - A</a></li>
             </ul>
-            <ul class="uk-subnav uk-subnav-pill">   
-   
+            <ul class="uk-subnav uk-subnav-pill">
+
                 <li uk-filter-control="sort:data-quantity;order:desc"><a href="#">Quantity + </a></li>
                 <li uk-filter-control="sort:data-quantity;"><a href="#">Quantity - </a></li>
             </ul>
         </div>
 
-        <ul uk-grid class="uk-grid-medium uk-margin-auto card-filter">
+        <ul uk-grid class="uk-grid-medium  uk-margin-large-bottom uk-margin-auto card-filter">
             {{ if .CardsInInventory}}
             {{ range .CardsInInventory }}
             {{ if eq .Card.Rarity 2}}
