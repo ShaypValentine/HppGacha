@@ -139,3 +139,13 @@ if (document.getElementById("timerToRoll") != null) {
         }
     }, 1000);
 }
+
+
+document.addEventListener('click', function (event) {
+
+    // If the clicked element doesn't have the right selector, bail
+    if (!event.target.matches('.flip-card-back')) return;
+    event.preventDefault();
+    let flipInner = event.target.parentNode
+    flipInner.style.transform = 'rotateY(180deg)'
+})
