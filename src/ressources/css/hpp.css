@@ -265,14 +265,14 @@ body {
     max-width: 140px;
   }
 
-  .rare-card-container {
+  .rare-card-container,.rare-card-container-inventory {
     margin-top: 10px;
     height: 222px;
     display: grid;
     width: 140px;
   }
 
-  .rare-card {
+  .rare-card,.rare-card-inventory {
     width: 140px;
     height: 130px;
     position: relative;
