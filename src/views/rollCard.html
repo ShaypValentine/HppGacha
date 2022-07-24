@@ -1,12 +1,12 @@
 {{ define "card"}}
 <div class="card cardcount flip-card">
     <div class="flip-card-inner">
-        <div class="flip-card-back">
+        <div class="flip-card-back {{ if eq .User.ID 9}} topCollector {{end }}" >
         </div>
         <div class="flip-card-front">
-            <img draggable="false" class="imgResize" src="ressources/pics/{{ .Avatar }}" alt="{{.Cardname}}">
+            <img draggable="false" class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
             <div class="container">
-                <h4><b>{{ .Cardname }}</b></h4>
+                <h4><b>{{ .Card.Cardname }}</b></h4>
             </div>
         </div>
     </div>
@@ -16,21 +16,21 @@
 {{define "rareCard"}}
 <div class="rare-card-container cardcount flip-card">
     <div class="flip-card-inner">
-        <div class="flip-card-back">
+        <div class="flip-card-back  {{ if eq .User.ID 9}} topCollector {{end }}" >
         </div>
         <div class="flip-card-front-rare">
 
             <div class="rare-card">
-                <img draggable="false" class="imgResize" src="ressources/pics/{{ .Avatar }}" alt="{{.Cardname}}">
+                <img draggable="false" class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
             </div>
             <div class="rare-container">
-                <h4><b>{{ .Cardname }}</b></h4>            </div>
+                <h4><b>{{ .Card.Cardname }}</b></h4>            </div>
         </div>
     </div>
 </div>
 {{end}}
 
-{{if eq .Rarity 2}}
+{{if eq .Card.Rarity 2}}
 {{template "rareCard" . }}
 {{else}}
 {{template "card" .}}

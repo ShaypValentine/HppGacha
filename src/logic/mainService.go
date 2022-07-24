@@ -33,6 +33,11 @@ type TopCollector struct {
 	UniqueCard int    `json:"uniqueCard" db:"uniqueCard"`
 }
 
+type RolledCard struct {
+	Card models.Card
+	User models.User
+}
+
 func Index(w http.ResponseWriter, r *http.Request) {
 	var indexInfos IndexInfo
 	tpl, err := template.ParseFiles(
@@ -55,6 +60,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func Roll(w http.ResponseWriter, r *http.Request) {
+	var rolledCard RolledCard
 	tpl, err := template.ParseFiles("src/views/rollCard.html")
 	if err != nil {
 		log.Panicln(err)
@@ -71,8 +77,9 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 				addToInventory(connectedUser, rolledItem)
 			}
 		}
-
-		err = tpl.Execute(w, rolledItem.Card)
+		rolledCard.User = connectedUser
+		rolledCard.Card = rolledItem.Card
+		err = tpl.Execute(w, rolledCard)
 		if err != nil {
 			log.Panicln(err)
 		}

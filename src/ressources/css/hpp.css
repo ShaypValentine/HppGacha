@@ -136,8 +136,8 @@ body {
 }
 
 
-.flip-card-front-rare:before,
-.flip-card-front-rare:after,
+.rare-card:before,
+.rare-card:after,
 .rare-card-inventory:before,
 .rare-card-inventory:after {
   content: "";
@@ -152,7 +152,7 @@ body {
   transition: all .33s ease;
 }
 
-.flip-card-front-rare:before,
+.rare-card:before,
 .rare-card-inventory:before {
   background-position: 50% 50%;
   background-size: 300% 300%;
@@ -168,7 +168,7 @@ body {
   z-index: 1;
 }
 
-.flip-card-front-rare:after,
+.rare-card:after,
 .rare-card-inventory:after {
   opacity: 1;
   background-image: url("/ressources/pics/sparkles.gif"),
@@ -238,6 +238,11 @@ body {
 .flip-card-back {
   background: url("/ressources/pics/cardback.png");
   color: black;
+}
+
+.topCollector{
+  background: url("/ressources/pics/AraragiBack.png");
+  color: black; 
 }
 
 @media (max-width: 480px) {
@@ -318,7 +323,10 @@ body {
     background: url("/ressources/pics/cardbackmobile.png");
     color: black;
   }
-
+  .topCollector{
+    background: url("/ressources/pics/AraragiBackMobile.png");
+    color: black; 
+  }
 }
 
 table {
