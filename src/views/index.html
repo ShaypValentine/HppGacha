@@ -20,7 +20,7 @@
                     data-rolls="{{.User.AvailableRolls}}" id="availableRolls">{{.User.AvailableRolls}}</span> </button>
 
             {{ else }}
-            <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="roll()">Roll</button>
+            <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="debouncedRoll()">Roll</button>
             {{ end }}
         </div>
         <div class="grid-right">
