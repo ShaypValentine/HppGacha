@@ -10,4 +10,5 @@ type Card struct {
 	Avatar           string
 	Weight           uint
 	CardsInInventory []CardInInventory
+	IsShadowCard     bool `gorm:"default:false"`
 }

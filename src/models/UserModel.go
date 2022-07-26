@@ -8,4 +8,5 @@ type User struct {
 	Password         string
 	AvailableRolls   uint `gorm:"default:4"`
 	CardsInInventory []CardInInventory
+	ShadowPortal     ShadowPortal
 }

@@ -22,14 +22,25 @@ func init() {
 }
 
 var accumulatedWeight uint
+var shadowWeight uint
 var entries []Entry
+var shadowEntries []Entry
 
 func AddEntry(card models.Card) {
 	var entry Entry
-	entry.Card = card
-	accumulatedWeight += card.Weight
-	entry.AccumulatedWeight = accumulatedWeight
-	entries = append(entries, entry)
+	var shadowEntry Entry
+	if(card.IsShadowCard){
+		shadowEntry.Card = card
+		shadowWeight += card.Weight
+		shadowEntry.AccumulatedWeight = shadowWeight
+		shadowEntries = append(shadowEntries, entry)
+	}else{
+		entry.Card = card
+		accumulatedWeight += card.Weight
+		entry.AccumulatedWeight = accumulatedWeight
+		entries = append(entries, entry)
+	}
+
 }
 
 func getRandom() Entry {
@@ -44,6 +55,7 @@ func getRandom() Entry {
 
 func EmptyEntries() {
 	entries = nil
+	shadowEntries = nil
 	accumulatedWeight = 0
 }
 

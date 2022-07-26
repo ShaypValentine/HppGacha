@@ -8,6 +8,7 @@
             <li><a href="/inscription">Sign up</a></li>
             {{ else }}
             <li><a id="connected" data-connected=true href="/inventory">Inventory</a> </li>
+            <li><a href="/shadow/portal">Shadow Portal</a> </li>
             {{end}}
         </ul>
         <a href="#" class="uk-navbar-toggle uk-hidden@s uk-margin-small-left" uk-navbar-toggle-icon
@@ -38,13 +39,15 @@
             <li><a href="/inscription">Sign up</a></li>
             {{ else }}
             <li><a id="connected" data-connected=true href="/inventory">Inventory</a> </li>
+            <li><a href="/shadow/portal">Shadow Portal</a> </li>
+
             {{end}}
         </ul>
     </div>
 </div>
 {{ end }}
 
-
+<!-- Login  Login  Login  Login  Login  Login  Login  Login  Login  Login  Login  Login  Login  Login  Login  Login  Login   Login   Login   Login -->
 {{ define "navbar_login"}}
 <nav class="uk-background-secondary uk-light" uk-navbar>
     <div class="uk-navbar-left">
@@ -74,7 +77,7 @@
     </div>
 </div>
 {{ end }}
-
+<!-- signup  signup  signup  signup  signup  signup  signup  signup  signup  signup  signup  signup  signup  signup  signup  signup  signup  signup -->
 {{ define "navbar_signup"}}
 <nav class="uk-background-secondary uk-light" uk-navbar>
     <div class="uk-navbar-left">
@@ -104,13 +107,14 @@
     </div>
 </div>
 {{ end }}
-
+<!-- inventory  inventory  inventory  inventory  inventory  inventory  inventory  inventory  inventory  inventory  inventory  inventory  inventory -->
 {{ define "navbar_inventory"}}
 <nav class="uk-background-secondary uk-light" uk-navbar>
     <div class="uk-navbar-left">
         <ul class="uk-navbar-nav uk-margin-small-left uk-visible@s">
             <li><a href="/">Home</a></li>
             <li class="uk-active"> <a href="#">Inventory</a> </li>
+            <li><a href="/shadow/portal">Shadow Portal</a> </li>
         </ul>
         <a href="#" class="uk-navbar-toggle uk-hidden@s uk-margin-small-left" uk-navbar-toggle-icon
             uk-toggle="target: #sidenav"></a>
@@ -131,6 +135,41 @@
         <ul class="uk-nav">
             <li><a href="/">Home</a></li>
             <li class="uk-active"> <a href="/inventory">Inventory</a> </li>
+            <li><a href="/shadow/portal">Shadow Portal</a> </li>
+        </ul>
+    </div>
+</div>
+{{ end }}
+
+
+{{ define "navbar_shadow"}}
+<nav class="uk-background-secondary uk-light" uk-navbar>
+    <div class="uk-navbar-left">
+        <ul class="uk-navbar-nav uk-margin-small-left uk-visible@s">
+            <li><a href="/">Home</a></li>
+            <li> <a href="/inventory">Inventory</a> </li>
+            <li class="uk-active"><a href="/shadow/portal">Shadow Portal</a> </li>
+        </ul>
+        <a href="#" class="uk-navbar-toggle uk-hidden@s uk-margin-small-left" uk-navbar-toggle-icon
+            uk-toggle="target: #sidenav"></a>
+    </div>
+    <div class="uk-navbar-center">
+        <ul class="uk-navbar-nav uk-visible@s">
+            <li>
+                HppGacha
+            </li>
+        </ul>
+    </div>
+    <div class="uk-navbar-right uk-margin-large-right">
+        Connected as : {{ .Username }}
+    </div>
+</nav>
+<div id="sidenav" uk-offcanvas="bg-close:true;mode:reveal;" class="uk-offcanvas">
+    <div class="uk-offcanvas-bar">
+        <ul class="uk-nav">
+            <li><a href="/">Home</a></li>
+            <li> <a href="/inventory">Inventory</a> </li>
+            <li><a href="/shadow/portal">Shadow Portal</a> </li>
         </ul>
     </div>
 </div>
