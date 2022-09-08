@@ -1,7 +1,8 @@
 {{ define "card"}}
 <div class="card cardcount flip-card">
     <div class="flip-card-inner">
-        <div class="flip-card-back {{ if eq .User.ID 9}} topCollector {{end }}" >
+        <div
+            class="flip-card-back {{ if eq .User.ID 9}} topCollector {{end }} {{ if eq .User.ID 0}} topCollector2 {{end }}">
         </div>
         <div class="flip-card-front">
             <img draggable="false" class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
@@ -16,15 +17,38 @@
 {{define "rareCard"}}
 <div class="rare-card-container cardcount flip-card">
     <div class="flip-card-inner">
-        <div class="flip-card-back  {{ if eq .User.ID 9}} topCollector {{end }}" >
+        <div
+            class="flip-card-back  {{ if eq .User.ID 9}} topCollector {{end }} {{ if eq .User.ID 0}} topCollector2 {{end }}">
         </div>
         <div class="flip-card-front-rare">
 
             <div class="rare-card">
-                <img draggable="false" class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
+                <img draggable="false" class="imgResize" src="ressources/pics/{{ .Card.Avatar }}"
+                    alt="{{.Card.Cardname}}">
             </div>
             <div class="rare-container">
-                <h4><b>{{ .Card.Cardname }}</b></h4>            </div>
+                <h4><b>{{ .Card.Cardname }}</b></h4>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{define "legendaryCard"}}
+<div class="legendary-card-container cardcount flip-card">
+    <div class="flip-card-inner">
+        <div
+            class="flip-card-back  {{ if eq .User.ID 9}} topCollector {{end }} {{ if eq .User.ID 0}} topCollector2 {{end }}">
+        </div>
+        <div class="flip-card-front-legendary">
+
+            <div class="legendary-card">
+                <img draggable="false" class="imgResize" src="ressources/pics/{{ .Card.Avatar }}"
+                    alt="{{.Card.Cardname}}">
+            </div>
+            <div class="legendary-container">
+                <h4 class="rainbow_text_animated"><b>{{ .Card.Cardname }}</b></h4>
+            </div>
         </div>
     </div>
 </div>
@@ -32,6 +56,8 @@
 
 {{if eq .Card.Rarity 2}}
 {{template "rareCard" . }}
+{{else if eq .Card.Rarity 3}}
+{{template "legendaryCard" . }}
 {{else}}
 {{template "card" .}}
 {{end}}

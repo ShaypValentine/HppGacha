@@ -54,18 +54,25 @@ body {
 
 .container {
   text-align: center;
+    display: grid;
+    height: 80px;
+    break-inside: auto;
+    align-items: center;
 }
 
 :root {
   --color1: rgb(0, 231, 255);
   --color2: rgb(255, 0, 231);
+  --color3: rgb(218, 194, 60);
+  --color4: rgb(175, 41, 41);
 }
 
 /* :root {
   --color1: rgb(136, 255, 0);
   --color2: rgb(255, 0, 231);
 } */
-.rare-container {
+.rare-container,
+.legendary-container {
   text-align: center;
   display: grid;
   height: 50px;
@@ -73,7 +80,8 @@ body {
   align-items: center;
 }
 
-.rare-card-container {
+.rare-card-container,
+.legendary-card-container {
   margin-top: 10px;
   height: 244px;
   display: grid;
@@ -101,8 +109,30 @@ body {
     0 8px 16px -20px rgba(0, 0, 0, 0.5);
 }
 
+.legendary-card-container-inventory {
+  margin-top: 10px;
+  height: 244px;
+  display: grid;
+  width: 180px;
+  margin-top: 10px;
+  height: 244px;
+  display: grid;
+  width: 180px;
+  transition: 0.3s;
+  background-color: #240d0a;
+  box-shadow:
+    -5px -5px 5px -5px var(--color3),
+    5px 5px 5px -5px var(--color4),
+    -7px -7px 10px -5px transparent,
+    7px 7px 10px -5px transparent,
+    0 0 5px 0px rgba(255, 255, 255, 0),
+    0 8px 16px -20px rgba(0, 0, 0, 0.5);
+}
+
 .rare-card,
-.rare-card-inventory {
+.rare-card-inventory,
+.legendary-card,
+.legendary-card-inventory {
   width: 180px;
   height: 170px;
   position: relative;
@@ -135,11 +165,25 @@ body {
     0 8px 16px -20px rgba(0, 0, 0, 0.5);
 }
 
+.flip-card-front-legendary:hover,
+.legendary-card-container-inventory:hover {
+  box-shadow:
+    -20px -20px 30px -25px var(--color3),
+    20px 20px 30px -25px var(--color4),
+    -7px -7px 10px -5px var(--color3),
+    7px 7px 10px -5px var(--color4),
+    0 0 13px 4px rgba(255, 255, 255, 0.3),
+    0 8px 16px -20px rgba(0, 0, 0, 0.5);
+}
 
 .rare-card:before,
+.legendary-card:before,
 .rare-card:after,
+.legendary-card:after,
 .rare-card-inventory:before,
-.rare-card-inventory:after {
+.legendary-card-inventory:before,
+.rare-card-inventory:after,
+.legendary-card-inventory:after {
   content: "";
   position: absolute;
   left: 0;
@@ -168,8 +212,26 @@ body {
   z-index: 1;
 }
 
+.legendary-card:before,
+.legendary-card-inventory:before {
+  background-position: 50% 50%;
+  background-size: 300% 300%;
+  background-image: linear-gradient(115deg,
+      transparent 0%,
+      var(--color3) 25%,
+      transparent 47%,
+      transparent 53%,
+      var(--color4) 75%,
+      transparent 100%);
+  opacity: .5;
+  filter: brightness(.5) contrast(1);
+  z-index: 1;
+}
+
 .rare-card:after,
-.rare-card-inventory:after {
+.legendary-card:after,
+.rare-card-inventory:after,
+.legendary-card-inventory:after {
   opacity: 1;
   background-image: url("/ressources/pics/sparkles.gif"),
     url("/ressources/pics/holo.webp"),
@@ -207,6 +269,7 @@ body {
 
 .flip-card-front,
 .flip-card-front-rare,
+.flip-card-front-legendary,
 .flip-card-back {
   position: absolute;
   width: 100%;
@@ -235,14 +298,33 @@ body {
     0 8px 16px -20px rgba(0, 0, 0, 0.5);
 }
 
+.flip-card-front-legendary {
+  color: rgb(226, 223, 11);
+  transform: rotateY(180deg);
+  transition: 0.3s;
+  background-color: #240d0a;
+  box-shadow:
+    -5px -5px 5px -5px var(--color3),
+    5px 5px 5px -5px var(--color4),
+    -7px -7px 10px -5px transparent,
+    7px 7px 10px -5px transparent,
+    0 0 5px 0px rgba(255, 255, 255, 0),
+    0 8px 16px -20px rgba(0, 0, 0, 0.5);
+}
+
 .flip-card-back {
   background: url("/ressources/pics/cardback.png");
   color: black;
 }
 
-.topCollector{
+.topCollector {
   background: url("/ressources/pics/AraragiBack.png");
-  color: black; 
+  color: black;
+}
+
+.topCollector2 {
+  background: url("/ressources/pics/AraragiBack.png");
+  color: black;
 }
 
 @media (max-width: 480px) {
@@ -270,14 +352,20 @@ body {
     max-width: 140px;
   }
 
-  .rare-card-container,.rare-card-container-inventory {
+  .rare-card-container,
+  .rare-card-container-inventory,
+  .legendary-card-container,
+  .legendary-card-container-inventory {
     margin-top: 10px;
     height: 222px;
     display: grid;
     width: 140px;
   }
 
-  .rare-card,.rare-card-inventory {
+  .rare-card,
+  .rare-card-inventory,
+  .legendary-card,
+  .legendary-card-inventory {
     width: 140px;
     height: 130px;
     position: relative;
@@ -323,9 +411,10 @@ body {
     background: url("/ressources/pics/cardbackmobile.png");
     color: black;
   }
-  .topCollector{
+
+  .topCollector2 {
     background: url("/ressources/pics/AraragiBackMobile.png");
-    color: black; 
+    color: black;
   }
 }
 
@@ -341,4 +430,23 @@ table {
 .uk-subnav-pill>.uk-active>a {
   background-color: #000000;
   color: #fff;
+}
+
+.rainbow_text_animated {
+  background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
+}
+
+@keyframes rainbow_animation {
+  0%,100% {
+      background-position: 0 0;
+  }
+
+  50% {
+      background-position: 100% 0;
+  }
 }
