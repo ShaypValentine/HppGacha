@@ -16,7 +16,7 @@
 
                 Time before new roll : <span id="timerToRoll"></span>
             </div>
-            <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="roll()">Roll : <span
+            <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="debouncedRoll()">Roll : <span
                     data-rolls="{{.User.AvailableRolls}}" id="availableRolls">{{.User.AvailableRolls}}</span> </button>
 
             {{ else }}

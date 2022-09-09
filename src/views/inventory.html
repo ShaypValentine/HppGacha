@@ -11,11 +11,18 @@
         </div>
     </div>
     x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
-    {{ if ge .Quantity 4 }}
-    <button class="recycle" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Recycle
-        3 for 1 roll </button>
-
-    {{ end }}
+    <button class="uk-button-small uk-button-secondary" type="button">Actions</button>
+    <div class="uk-light uk-background-secondary " uk-dropdown="mode: click;">
+        <ul class="uk-nav uk-dropdown-nav">
+            {{ if ge .Quantity 4 }}
+            <li class="li-action recycle" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Recycle 3 for 1 roll</li>
+            <li class="uk-nav-divider"></li>
+            {{ end }}
+            {{ if ge .Quantity 2 }}
+            <li class="li-action sacrifice-rare" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Sacrifice </li>
+            {{ end }}   
+        </ul>
+    </div>
 </div>
 {{ end}}
 
@@ -30,10 +37,18 @@
         </div>
     </div>
     x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
-    {{ if ge .Quantity 4 }}
-    <button class="recycle" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Recycle
-        3 for 1 roll </button>
-    {{ end }}
+    <button class="uk-button-small uk-button-secondary" type="button">Actions</button>
+    <div class="uk-light uk-background-secondary " uk-dropdown="mode: click;">
+        <ul class="uk-nav uk-dropdown-nav">
+            {{ if ge .Quantity 4 }}
+            <li class="li-action recycle" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Recycle 3 for 1 roll</li>
+            <li class="uk-nav-divider"></li>
+            {{ end }}
+            {{ if ge .Quantity 2 }}
+            <li class="li-action sacrifice-rare" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Sacrifice </li>
+            {{ end }}   
+        </ul>
+    </div>
 </div>
 {{ end }}
 

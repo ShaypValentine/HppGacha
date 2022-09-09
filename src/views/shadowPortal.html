@@ -1,6 +1,27 @@
 <html>
-    {{ template "head"}}
-    <body>
-        {{ template "navbar_shadow"}}
-    </body>
+{{ template "head_shadow"}}
+
+<body>
+    {{ template "navbar_shadow"}}
+    <div uk-parallax="bgy: -200"  class="realbody">
+        <div class="grid">
+            <div class="grid-left">
+    
+            </div>
+            <div class="grid-center">
+                <h1></h1>
+                <div class="lore-text">
+                The portal is closed. At least for now...
+                    <!-- Time before new roll : <span id="timerToRoll"></span> -->
+                </div>
+                <!-- <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="debouncedRoll()">Roll</button> -->
+            </div>
+            <div class="grid-right">
+    
+            </div>
+        </div>
+    </div>
+    {{template "footer"}}
+    {{ template "js"}}    
+</body>
 </html>
