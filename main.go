@@ -20,6 +20,7 @@ func main() {
 	db.AutoMigrate(&models.Card{})
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.CardInInventory{})
+	db.AutoMigrate(&models.ShadowPortal{})
 
 	logic.DataToRoll(db)
 	fileServer := http.FileServer(neuteredFileSystem{http.Dir("src/ressources")})
@@ -31,6 +32,7 @@ func main() {
 		http.Redirect(w, r, "/", http.StatusFound)
 	})
 	http.HandleFunc("/recycle", logic.RecycleCard)
+	http.HandleFunc("/sacrifice", logic.SacrificeCard)
 	http.HandleFunc("/inventory", logic.ShowInventory)
 	http.HandleFunc("/signup", logic.Signup)
 	http.HandleFunc("/signin", logic.Signin)

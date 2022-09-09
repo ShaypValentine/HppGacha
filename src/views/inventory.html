@@ -19,7 +19,7 @@
             <li class="uk-nav-divider"></li>
             {{ end }}
             {{ if ge .Quantity 2 }}
-            <li class="li-action sacrifice-rare" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Sacrifice </li>
+            <li class="li-action sacrifice" data-rarity="{{.Card.Rarity}}" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Sacrifice </li>
             {{ end }}   
         </ul>
     </div>
@@ -45,7 +45,7 @@
             <li class="uk-nav-divider"></li>
             {{ end }}
             {{ if ge .Quantity 2 }}
-            <li class="li-action sacrifice-rare" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Sacrifice </li>
+            <li class="li-action sacrifice" data-rarity="{{.Card.Rarity}}" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Sacrifice </li>
             {{ end }}   
         </ul>
     </div>
@@ -68,11 +68,7 @@
         <ul class="uk-nav uk-dropdown-nav">
             {{ if ge .Quantity 4 }}
             <li class="li-action recycle" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Recycle 3 for 1 roll</li>
-            <li class="uk-nav-divider"></li>
             {{ end }}
-            {{ if ge .Quantity 2 }}
-            <li class="li-action sacrifice-rare" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Sacrifice </li>
-            {{ end }}   
         </ul>
     </div>
 </div>

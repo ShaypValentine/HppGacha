@@ -3,25 +3,50 @@
 
 <body>
     {{ template "navbar_shadow"}}
-    <div uk-parallax="bgy: -200"  class="realbody">
+    <div uk-parallax="bgy: -200" class="realbody">
         <div class="grid">
             <div class="grid-left">
-    
+
             </div>
             <div class="grid-center">
                 <h1></h1>
                 <div class="lore-text">
-                The portal is closed. At least for now...
+
+                    {{if lt .ShadowPortal.BaseCardLeft 0 }}
+                    The portal is wide open but it's lacking something to let the visitor trough.
+                    {{ else if lt .ShadowPortal.BaseCardLeft 11 }}
+                    Something is trying to get ouf of the portal.
+                    {{ else if lt .ShadowPortal.BaseCardLeft 21 }}
+                    Your hear voices, it won't be long now.
+                    {{ else if lt .ShadowPortal.BaseCardLeft 31 }}
+                    Reality is starting to be distorded.
+                    {{else if lt .ShadowPortal.BaseCardLeft 41 }}
+                    If nothing is done the portal will be corrupt the surroundings.
+                    {{else if lt .ShadowPortal.BaseCardLeft 51 }}
+                    You were right the portal is growing.
+                    {{else if lt .ShadowPortal.BaseCardLeft 61 }}
+                    You have a bad feeling, the portal seems to be growing.
+                    {{else if lt .ShadowPortal.BaseCardLeft 71 }}
+                    Something about the portal feels different.
+                    {{ else }}
+                    The portal is closed. At least for now...
+                    {{end}}
+                    {{if lt .ShadowPortal.RareCardLeft 15}}
+                    What have you done ?!
+                    {{ else if lt .ShadowPortal.RareCardLeft 10 }}
+                    Why would you reinforce the portal ?
+                    {{end}}
                     <!-- Time before new roll : <span id="timerToRoll"></span> -->
                 </div>
                 <!-- <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="debouncedRoll()">Roll</button> -->
             </div>
             <div class="grid-right">
-    
+
             </div>
         </div>
     </div>
     {{template "footer"}}
-    {{ template "js"}}    
+    {{ template "js"}}
 </body>
+
 </html>

@@ -8,7 +8,7 @@ import (
 
 type ShadowPortal struct {
 	gorm.Model
-	UserID               uint
+	UserID               uint `gorm:"uniqueIndex"`
 	BaseCardLeft         uint `gorm:"default:75"`
 	RareCardLeft         uint `gorm:"default:15"`
 	HasAccess            bool `gorm:"default:false"`
