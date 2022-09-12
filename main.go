@@ -37,6 +37,7 @@ func main() {
 	http.HandleFunc("/signup", logic.Signup)
 	http.HandleFunc("/signin", logic.Signin)
 	http.HandleFunc("/roll", logic.Roll)
+	http.HandleFunc("/shadowRoll", logic.ShadowRoll)
 	http.HandleFunc("/login", logic.LoginPageHandler)
 	http.HandleFunc("/inscription", logic.InscriptionPageHandler)
 	http.HandleFunc("/", logic.Index)

@@ -54,10 +54,10 @@ body {
 
 .container {
   text-align: center;
-    display: grid;
-    height: 80px;
-    break-inside: auto;
-    align-items: center;
+  display: grid;
+  height: 80px;
+  break-inside: auto;
+  align-items: center;
 }
 
 :root {
@@ -65,6 +65,8 @@ body {
   --color2: rgb(255, 0, 231);
   --color3: rgb(218, 194, 60);
   --color4: rgb(175, 41, 41);
+  --color5: rgb(5, 0, 73);
+  --color6: rgb(81, 3, 112);
 }
 
 /* :root {
@@ -416,6 +418,11 @@ body {
     background: url("/ressources/pics/AraragiBackMobile.png");
     color: black;
   }
+
+  .topCollector {
+    background: url("/ressources/pics/AraragiBackMobile.png");
+    color: black;
+  }
 }
 
 table {
@@ -432,11 +439,12 @@ table {
   color: #fff;
 }
 
-.li-action{
+.li-action {
   cursor: pointer;
 }
+
 .rainbow_text_animated {
-  background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+  background: linear-gradient(to right, #6666ff, #0099ff, #00ff00, #ff3399, #6666ff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -445,11 +453,155 @@ table {
 }
 
 @keyframes rainbow_animation {
-  0%,100% {
-      background-position: 0 0;
+
+  0%,
+  100% {
+    background-position: 0 0;
   }
 
   50% {
-      background-position: 100% 0;
+    background-position: 100% 0;
   }
+}
+
+.shadow_rainbow_text_animated {
+  background: linear-gradient(to right, #0f6a7a, #0059ff, #2e12d1, #8911ce);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shadow_rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
+}
+
+@keyframes shadow_rainbow_animation {
+
+  0%,
+  100% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 100% 0;
+  }
+}
+
+
+
+.shadow-container {
+  text-align: center;
+  display: grid;
+  height: 50px;
+  break-inside: auto;
+  align-items: center;
+}
+
+.shadow-card-container {
+  margin-top: 10px;
+  height: 244px;
+  display: grid;
+  width: 180px;
+
+}
+
+.shadow-card-container-inventory {
+  margin-top: 10px;
+  height: 244px;
+  display: grid;
+  width: 180px;
+  margin-top: 10px;
+  height: 244px;
+  display: grid;
+  width: 180px;
+  transition: 0.3s;
+  background-color: #000000;
+  box-shadow:
+    -5px -5px 5px -5px var(--color5),
+    5px 5px 5px -5px var(--color6),
+    -7px -7px 10px -5px transparent,
+    7px 7px 10px -5px transparent,
+    0 0 5px 0px rgba(255, 255, 255, 0),
+    0 8px 16px -20px rgba(0, 0, 0, 0.5);
+}
+
+.shadow-card,
+.shadow-card-inventory {
+  width: 180px;
+  height: 170px;
+  position: relative;
+  overflow: hidden;
+  overflow: hidden;
+  z-index: 10;
+  touch-action: none;
+
+
+  transition: transform 0.5s ease, box-shadow 0.2s ease;
+  will-change: transform, filter;
+
+  background-color: #040712;
+  background-image: var(--front);
+  background-size: 180px 170px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  transform-origin: center;
+
+}
+
+.flip-card-front-shadow:hover,
+.shadow-card-container-inventory:hover {
+  box-shadow:
+    -20px -20px 30px -25px var(--color5),
+    20px 20px 30px -25px var(--color6),
+    -7px -7px 10px -5px var(--color5),
+    7px 7px 10px -5px var(--color6),
+    0 0 13px 4px rgba(255, 255, 255, 0.3),
+    0 8px 16px -20px rgba(0, 0, 0, 0.5);
+}
+
+.shadow-card:before,
+.shadow-card:after,
+.shadow-card-inventory:before,
+.shadow-card-inventory:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-repeat: no-repeat;
+  opacity: .5;
+  mix-blend-mode: color-dodge;
+  transition: all .33s ease;
+}
+
+
+.shadow-card:before,
+.shadow-card-inventory:before {
+  background-position: 50% 50%;
+  background-size: 300% 300%;
+  background-image: linear-gradient(115deg,
+      transparent 0%,
+      var(--color5) 25%,
+      transparent 47%,
+      transparent 53%,
+      var(--color6) 75%,
+      transparent 100%);
+  opacity: .5;
+  filter: brightness(.5) contrast(1);
+  z-index: 1;
+}
+
+.shadow-card:after,
+.shadow-card-inventory:after {
+  opacity: 1;
+  background-image: url("/ressources/pics/sparkles.gif"),
+    url("/ressources/pics/holo.webp"),
+    linear-gradient(125deg, #ff008450 15%, #fca40040 30%, #ffff0030 40%, #00ff8a20 60%, #00cfff40 70%, #cc4cfa50 85%);
+  background-position: 50% 50%;
+  background-size: 160%;
+  background-blend-mode: overlay;
+  z-index: 2;
+  filter: brightness(1) contrast(1);
+  transition: all .33s ease;
+  mix-blend-mode: color-dodge;
+  opacity: .75;
 }

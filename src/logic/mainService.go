@@ -195,7 +195,11 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 		id:     int(user.ID),
 		expiry: expiresAt,
 	}
-
+	var shadowPortal models.ShadowPortal
+	err = DB.Where("user_id=?", user.ID).Assign(models.ShadowPortal{UserID: user.ID}).FirstOrCreate(&shadowPortal).Error
+	if err != nil {
+		log.Panic(err)
+	}
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_token",
 		Value:   sessionToken,

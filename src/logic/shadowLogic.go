@@ -91,3 +91,32 @@ func consumeSacrifice(user models.User, card models.Card) (uint, string) {
 	}
 	return 0, "An error occured while trying to sacrifice the card"
 }
+
+func ShadowRoll(w http.ResponseWriter, r *http.Request) {
+	var rolledCard RolledCard
+	tpl, err := template.ParseFiles("src/views/rollCard.html")
+	if err != nil {
+		log.Panicln(err)
+	}
+	if r.Method == "GET" {
+		w.Header().Set("Content-Type", "application/json")
+		rolledItem := getRandomShadow()
+		connectedUser, exists := getConnectedUser(w, r)
+		if exists {
+			Refresh(w, r)
+			if connectedUser.ShadowPortal.AvailableShadowRolls > 0 {
+				connectedUser.ShadowPortal.AvailableShadowRolls--
+				DB.Save(&connectedUser.ShadowPortal)
+				addToInventory(connectedUser, rolledItem)
+			}
+		}
+		rolledCard.User = connectedUser
+		rolledCard.Card = rolledItem.Card
+		err = tpl.Execute(w, rolledCard)
+		if err != nil {
+			log.Panicln(err)
+		}
+
+	}
+
+}

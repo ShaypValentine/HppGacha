@@ -11,7 +11,8 @@
         </div>
     </div>
     x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
-    <button class="uk-button-small uk-button-secondary uk-margin-small-top" {{ if eq .Quantity 1 }} disabled {{end}} type="button">Actions</button>
+    <button class="uk-button-small uk-button-secondary uk-margin-small-top" {{ if eq .Quantity 1 }} disabled {{end}}
+        type="button">Actions</button>
     <div class="uk-light uk-background-secondary " uk-dropdown="mode: click;">
         <ul class="uk-nav uk-dropdown-nav">
             {{ if ge .Quantity 4 }}
@@ -19,8 +20,9 @@
             <li class="uk-nav-divider"></li>
             {{ end }}
             {{ if ge .Quantity 2 }}
-            <li class="li-action sacrifice" data-rarity="{{.Card.Rarity}}" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Sacrifice </li>
-            {{ end }}   
+            <li class="li-action sacrifice" data-rarity="{{.Card.Rarity}}" data-id="{{.Card.ID}}"
+                data-quantity="{{.Quantity}}">Sacrifice </li>
+            {{ end }}
         </ul>
     </div>
 </div>
@@ -37,7 +39,8 @@
         </div>
     </div>
     x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
-    <button class="uk-button-small uk-button-secondary uk-margin-small-top"   {{ if eq .Quantity 1 }} disabled {{end}} type="button">Actions</button>
+    <button class="uk-button-small uk-button-secondary uk-margin-small-top" {{ if eq .Quantity 1 }} disabled {{end}}
+        type="button">Actions</button>
     <div class="uk-light uk-background-secondary " uk-dropdown="mode: click;">
         <ul class="uk-nav uk-dropdown-nav">
             {{ if ge .Quantity 4 }}
@@ -45,8 +48,9 @@
             <li class="uk-nav-divider"></li>
             {{ end }}
             {{ if ge .Quantity 2 }}
-            <li class="li-action sacrifice" data-rarity="{{.Card.Rarity}}" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Sacrifice </li>
-            {{ end }}   
+            <li class="li-action sacrifice" data-rarity="{{.Card.Rarity}}" data-id="{{.Card.ID}}"
+                data-quantity="{{.Quantity}}">Sacrifice </li>
+            {{ end }}
         </ul>
     </div>
 </div>
@@ -63,7 +67,8 @@
         </div>
     </div>
     x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
-    <button class="uk-button-small uk-button-secondary uk-margin-small-top"   {{ if eq .Quantity 1 }} disabled {{end}} type="button">Actions</button>
+    <button class="uk-button-small uk-button-secondary uk-margin-small-top" {{ if eq .Quantity 1 }} disabled {{end}}
+        type="button">Actions</button>
     <div class="uk-light uk-background-secondary " uk-dropdown="mode: click;">
         <ul class="uk-nav uk-dropdown-nav">
             {{ if ge .Quantity 4 }}
@@ -71,6 +76,21 @@
             {{ end }}
         </ul>
     </div>
+</div>
+{{ end }}
+
+
+{{ define "shadowCard" }}
+<div class="tag-shadow" data-name="{{.Card.Cardname}}" data-quantity="{{.Quantity}}">
+    <div class="shadow-card-container-inventory">
+        <div class="shadow-card-inventory">
+            <img class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
+        </div>
+        <div class="shadow-container">
+            <h4><b class="shadow_rainbow_text_animated">{{.Card.Cardname}}</b></h4>
+        </div>
+    </div>
+    x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
 </div>
 {{ end }}
 
@@ -90,6 +110,7 @@
         <div class="uk-grid-medium  uk-margin-auto uk-grid-divider  uk-child-width-auto" uk-grid>
             <ul class="uk-subnav uk-subnav-pill">
                 <li uk-filter-control><a href="#">All</a></li>
+                <li uk-filter-control="filter:.tag-shadow;group:rarity"><a href="#">Shadow</a></li>
                 <li uk-filter-control="filter:.tag-legendary;group:rarity"><a href="#">Legendary</a></li>
                 <li uk-filter-control="filter:.tag-rare;group:rarity"><a href="#">Rare</a></li>
                 <li uk-filter-control="filter:.tag-common;group:rarity"><a href="#">Common</a></li>
@@ -108,7 +129,9 @@
         <ul uk-grid class="uk-grid-medium  uk-margin-large-bottom uk-margin-auto card-filter">
             {{ if .CardsInInventory}}
             {{ range .CardsInInventory }}
-            {{ if eq .Card.Rarity 2}}
+            {{ if .Card.IsShadowCard }}
+            {{ template "shadowCard" .}}
+            {{ else if eq .Card.Rarity 2}}
             {{ template "rareCard" .}}
             {{ else if eq .Card.Rarity 3}}
             {{ template "legendaryCard" .}}

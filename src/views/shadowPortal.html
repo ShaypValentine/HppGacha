@@ -2,18 +2,17 @@
 {{ template "head_shadow"}}
 
 <body>
-    {{ template "navbar_shadow"}}
+    {{ template "navbar_shadow" . }}
     <div uk-parallax="bgy: -200" class="realbody">
         <div class="grid">
             <div class="grid-left">
-
             </div>
             <div class="grid-center">
                 <h1></h1>
+                {{ if eq .ShadowPortal.HasAccess false }}
                 <div class="lore-text">
-
-                    {{if lt .ShadowPortal.BaseCardLeft 0 }}
-                    The portal is wide open but it's lacking something to let the visitor trough.
+                    {{if eq .ShadowPortal.BaseCardLeft 0 }}
+                    The portal is wide open.
                     {{ else if lt .ShadowPortal.BaseCardLeft 11 }}
                     Something is trying to get ouf of the portal.
                     {{ else if lt .ShadowPortal.BaseCardLeft 21 }}
@@ -31,18 +30,27 @@
                     {{ else }}
                     The portal is closed. At least for now...
                     {{end}}
-                    {{if lt .ShadowPortal.RareCardLeft 15}}
+                    {{ if eq .ShadowPortal.RareCardLeft 0 }}
+                    This reality is done for.
+                    {{ else if lt .ShadowPortal.RareCardLeft 7 }}
+                    Stop before it's too late !
+                    {{ else if lt .ShadowPortal.RareCardLeft 15}}
                     What have you done ?!
-                    {{ else if lt .ShadowPortal.RareCardLeft 10 }}
-                    Why would you reinforce the portal ?
                     {{end}}
-                    <!-- Time before new roll : <span id="timerToRoll"></span> -->
                 </div>
-                <!-- <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="debouncedRoll()">Roll</button> -->
+                {{else}}
+                <button class="uk-button uk-button-secondary uk-width-1-1" id="roll"
+                    onclick="debouncedShadowRoll()">Shadow Roll : <span
+                        data-rolls="{{.ShadowPortal.AvailableShadowRolls}}"
+                        id="availableShadowRolls">{{.ShadowPortal.AvailableShadowRolls}}</span></button>
+                {{end}}
+
             </div>
             <div class="grid-right">
 
             </div>
+        </div>
+        <div id="rolled" class="rollGrid">
         </div>
     </div>
     {{template "footer"}}
