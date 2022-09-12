@@ -70,10 +70,12 @@ func consumeSacrifice(user models.User, card models.Card) (uint, string) {
 	}
 
 	if storedCard.Quantity >= 2 {
-		if storedCard.Card.Rarity == 2 {
-			shadowPortal.RareCardLeft -= 1
-		} else {
-			shadowPortal.BaseCardLeft -= 1
+		if !shadowPortal.HasAccess {
+			if storedCard.Card.Rarity == 2 {
+				shadowPortal.RareCardLeft -= 1
+			} else {
+				shadowPortal.BaseCardLeft -= 1
+			}
 		}
 		if shadowPortal.BaseCardLeft <= 0 && shadowPortal.RareCardLeft <= 0 {
 			shadowPortal.HasAccess = true
