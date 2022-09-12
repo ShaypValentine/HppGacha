@@ -20,6 +20,7 @@ func main() {
 	db.AutoMigrate(&models.Card{})
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.CardInInventory{})
+	db.AutoMigrate(&models.ShadowPortal{})
 
 	logic.DataToRoll(db)
 	fileServer := http.FileServer(neuteredFileSystem{http.Dir("src/ressources")})
@@ -31,10 +32,12 @@ func main() {
 		http.Redirect(w, r, "/", http.StatusFound)
 	})
 	http.HandleFunc("/recycle", logic.RecycleCard)
+	http.HandleFunc("/sacrifice", logic.SacrificeCard)
 	http.HandleFunc("/inventory", logic.ShowInventory)
 	http.HandleFunc("/signup", logic.Signup)
 	http.HandleFunc("/signin", logic.Signin)
 	http.HandleFunc("/roll", logic.Roll)
+	http.HandleFunc("/shadowRoll", logic.ShadowRoll)
 	http.HandleFunc("/login", logic.LoginPageHandler)
 	http.HandleFunc("/inscription", logic.InscriptionPageHandler)
 	http.HandleFunc("/", logic.Index)
@@ -42,6 +45,7 @@ func main() {
 	http.HandleFunc("/admin/new_card", admin.NewCard)
 	http.HandleFunc("/admin/show_users", admin.ShowUser)
 	http.HandleFunc("/admin/process_card", admin.ProcessCard)
+	http.HandleFunc("/shadow/portal", logic.ShadowIndex)
 	// Launch app on OS PORT var or 8008
 	env := os.Getenv("LOCALENV")
 	if env != "" {

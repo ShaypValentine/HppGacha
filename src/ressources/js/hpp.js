@@ -12,15 +12,15 @@ function roll() {
             counterAvailableRoll = document.getElementById("availableRolls")
             rolls = counterAvailableRoll.dataset.rolls
         }
-        if (rolls > 0 || isGuest ) {
+        if (rolls > 0 || isGuest) {
             fetch('/roll').then(function (response) {
                 return response.text()
             }).then(function (html) {
                 let rolled = document.getElementById("rolled")
-                let cards =  document.getElementsByClassName("cardcount")
-                if(cards.length >= 8){
-                    var lastEle = cards[ cards.length-1 ];
-                    if(lastEle !== undefined){
+                let cards = document.getElementsByClassName("cardcount")
+                if (cards.length >= 8) {
+                    var lastEle = cards[cards.length - 1];
+                    if (lastEle !== undefined) {
                         lastEle.remove()
 
                     }
@@ -38,6 +38,38 @@ function roll() {
                 console.warn(err)
             })
         }
+    }
+    rollBtn.disabled = false;
+}
+
+function shadowRoll() {
+    var rollBtn = document.getElementById("roll")
+    rollBtn.disabled = true
+    let rolls = 0
+    counterAvailableRoll = document.getElementById("availableShadowRolls")
+    rolls = counterAvailableRoll.dataset.rolls
+    if (rolls > 0) {
+        fetch('/shadowRoll').then(function (response) {
+            return response.text()
+        }).then(function (html) {
+            let rolled = document.getElementById("rolled")
+            let cards = document.getElementsByClassName("cardcount")
+            if (cards.length >= 8) {
+                var lastEle = cards[cards.length - 1];
+                if (lastEle !== undefined) {
+                    lastEle.remove()
+                }
+            }
+            rolled.innerHTML = html + rolled.innerHTML;
+            if (rolls > 0) {
+                rolls = rolls - 1
+                counterAvailableRoll.innerHTML = rolls;
+                counterAvailableRoll.dataset.rolls = rolls
+            }
+
+        }).catch(function (err) {
+            console.warn(err)
+        })
     }
     rollBtn.disabled = false;
 }
@@ -94,6 +126,58 @@ document.addEventListener('click', function (event) {
     }
 }, false);
 
+
+document.addEventListener('click', function (event) {
+
+    // If the clicked element doesn't have the right selector, bail
+    if (!event.target.matches('.sacrifice')) return;
+    event.preventDefault();
+    sacrificeTarget = event.target
+    if (sacrificeTarget !== null) {
+        var quantity = sacrificeTarget.dataset.quantity;
+        var rarity = sacrificeTarget.dataset.rarity;
+        var id = sacrificeTarget.dataset.id;
+        if (quantity !== undefined && quantity >= 2 && rarity !== undefined && id !== undefined) {
+            data = { id: id, rarity: rarity }
+            fetch("/sacrifice", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(function (response) {
+                return response.text()
+            }).then(function (data) {
+                obj = JSON.parse(data)
+                if (obj.error_string !== "") {
+                    alert(obj.error_string)
+                } else {
+                    sacrificeTarget.dataset.quantity = obj.new_quantity
+                    var quantityText = document.getElementById(id + "-quantity")
+                    quantityText.innerHTML = obj.new_quantity
+                    Flashy('flash-messages', {
+                        type: 'info',
+                        title: 'Card sacrificed',
+                        message: `The portal grows`,
+                        globalClose: true,
+                        expiry: 5000,
+                        styles: {
+                            icon: {
+                                type: 'unicode',
+                                val: '🌀'
+                            }
+                        }
+                    });
+                    if (obj.new_quantity < 2) {
+                        sacrificeTarget.remove()
+                    }
+                }
+            }).catch(function (err) {
+                console.warn(err)
+            })
+        }
+    }
+}, false);
 
 function isConnectedAndCookieExpired() {
     var elemConnect = document.getElementById("connected")
@@ -152,12 +236,13 @@ document.addEventListener('click', function (event) {
 
 
 const debouncedRoll = debounce(() => roll())
+const debouncedShadowRoll = debounce(() => shadowRoll())
 
 function debounce(func, wait = 200, immediate = true) {
     var timeout;
-    return function() {
+    return function () {
         var context = this, args = arguments;
-        var later = function() {
+        var later = function () {
             timeout = null;
             if (!immediate) func.apply(context, args);
         };

@@ -54,10 +54,33 @@
 </div>
 {{end}}
 
-{{if eq .Card.Rarity 2}}
+
+{{define "shadowCard"}}
+<div class="shadow-card-container cardcount flip-card">
+    <div class="flip-card-inner">
+        <div
+            class="flip-card-back  {{ if eq .User.ID 9}} topCollector {{end }} {{ if eq .User.ID 0}} topCollector2 {{end }}">
+        </div>
+        <div class="flip-card-front-shadow">
+
+            <div class="shadow-card">
+                <img draggable="false" class="imgResize" src="/ressources/pics/{{ .Card.Avatar }}"
+                    alt="{{.Card.Cardname}}">
+            </div>
+            <div class="shadow-container">
+                <h4 class="rainbow_text_animated"><b>{{ .Card.Cardname }}</b></h4>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+
+{{if .Card.IsShadowCard }}
+{{ template "shadowCard" . }}
+{{ else if eq .Card.Rarity 2}}
 {{template "rareCard" . }}
 {{else if eq .Card.Rarity 3}}
 {{template "legendaryCard" . }}
-{{else}}
+{{ else }}
 {{template "card" .}}
 {{end}}
