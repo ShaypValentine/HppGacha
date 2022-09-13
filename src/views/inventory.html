@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 {{ define "card"}}
-<div class="tag-common" data-name="{{.Card.Cardname}}" data-quantity="{{.Quantity}}">
+<div class="tag-common" data-name="{{.inventory.Card.Cardname}}" data-quantity="{{.inventory.Quantity}}">
     <div class="card">
-        <img class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
+        <img class="imgResize" src="ressources/pics/{{ .inventory.Card.Avatar }}" alt="{{.inventory.Card.Cardname}}">
         <div class="container">
-            <h4><b>{{ .Card.Cardname }}</b></h4>
+            <h4><b>{{ .inventory.Card.Cardname }}</b></h4>
 
         </div>
     </div>
-    x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
-    <button class="uk-button-small uk-button-secondary uk-margin-small-top" {{ if eq .Quantity 1 }} disabled {{end}}
+    x <span id="{{ .inventory.Card.ID }}-quantity">{{ .inventory.Quantity}}</span>
+    <button class="uk-button-small uk-button-secondary uk-margin-small-top" {{ if or ((eq .inventory.Quantity 1)) (and (lt .inventory.Quantity 4) (eq .baseLeft 0)  )}} disabled {{end}}
         type="button">Actions</button>
     <div class="uk-light uk-background-secondary " uk-dropdown="mode: click;">
         <ul class="uk-nav uk-dropdown-nav">
-            {{ if ge .Quantity 4 }}
-            <li class="li-action recycle" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Recycle 3 for 1 roll</li>
+            {{ if ge .inventory.Quantity 4 }}
+            <li class="li-action recycle" data-id="{{.inventory.Card.ID}}" data-quantity="{{.inventory.Quantity}}">Recycle 3 for 1 roll</li>
             <li class="uk-nav-divider"></li>
             {{ end }}
-            {{ if ge .Quantity 2 }}
-            <li class="li-action sacrifice" data-rarity="{{.Card.Rarity}}" data-id="{{.Card.ID}}"
-                data-quantity="{{.Quantity}}">Sacrifice </li>
+            {{ if and (ge .inventory.Quantity 2) (gt .baseLeft 0)}}
+            <li class="li-action sacrifice" data-rarity="{{.inventory.Card.Rarity}}" data-id="{{.inventory.Card.ID}}"
+                data-quantity="{{.inventory.Quantity}}">Sacrifice </li>
             {{ end }}
         </ul>
     </div>
@@ -29,27 +28,27 @@
 {{ end}}
 
 {{ define "rareCard" }}
-<div class="tag-rare" data-name="{{.Card.Cardname}}" data-quantity="{{.Quantity}}">
+<div class="tag-rare" data-name="{{.inventory.Card.Cardname}}" data-quantity="{{.inventory.Quantity}}">
     <div class="rare-card-container-inventory">
         <div class="rare-card-inventory">
-            <img class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
+            <img class="imgResize" src="ressources/pics/{{ .inventory.Card.Avatar }}" alt="{{.inventory.Card.Cardname}}">
         </div>
         <div class="rare-container">
-            <h4> <b>{{.Card.Cardname}}</b></h4>
+            <h4> <b>{{.inventory.Card.Cardname}}</b></h4>
         </div>
     </div>
-    x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
-    <button class="uk-button-small uk-button-secondary uk-margin-small-top" {{ if eq .Quantity 1 }} disabled {{end}}
+    x <span id="{{ .inventory.Card.ID }}-quantity">{{ .inventory.Quantity}}</span>
+    <button class="uk-button-small uk-button-secondary uk-margin-small-top" {{ if  or ((eq .inventory.Quantity 1)) (and (lt .inventory.Quantity 4) (eq .rareLeft 0)  ) }} disabled {{end}}
         type="button">Actions</button>
     <div class="uk-light uk-background-secondary " uk-dropdown="mode: click;">
         <ul class="uk-nav uk-dropdown-nav">
-            {{ if ge .Quantity 4 }}
-            <li class="li-action recycle" data-id="{{.Card.ID}}" data-quantity="{{.Quantity}}">Recycle 3 for 1 roll</li>
+            {{ if ge .inventory.Quantity 4 }}
+            <li class="li-action recycle" data-id="{{.inventory.Card.ID}}" data-quantity="{{.inventory.Quantity}}">Recycle 3 for 1 roll</li>
             <li class="uk-nav-divider"></li>
             {{ end }}
-            {{ if ge .Quantity 2 }}
-            <li class="li-action sacrifice" data-rarity="{{.Card.Rarity}}" data-id="{{.Card.ID}}"
-                data-quantity="{{.Quantity}}">Sacrifice </li>
+            {{ if and (ge .inventory.Quantity 2) (gt .rareLeft 0) }}
+            <li class="li-action sacrifice" data-rarity="{{.inventory.Card.Rarity}}" data-id="{{.inventory.Card.ID}}"
+                data-quantity="{{.inventory.Quantity}}">Sacrifice </li>
             {{ end }}
         </ul>
     </div>
@@ -125,18 +124,17 @@
                 <li uk-filter-control="sort:data-quantity;"><a href="#">Quantity - </a></li>
             </ul>
         </div>
-
         <ul uk-grid class="uk-grid-medium  uk-margin-large-bottom uk-margin-auto card-filter">
             {{ if .CardsInInventory}}
             {{ range .CardsInInventory }}
             {{ if .Card.IsShadowCard }}
             {{ template "shadowCard" .}}
             {{ else if eq .Card.Rarity 2}}
-            {{ template "rareCard" .}}
+            {{ template "rareCard" dict "inventory" . "rareLeft" $.ShadowPortal.RareCardLeft}}
             {{ else if eq .Card.Rarity 3}}
             {{ template "legendaryCard" .}}
             {{ else }}
-            {{ template "card" . }}
+            {{ template "card" dict "inventory" . "baseLeft" $.ShadowPortal.BaseCardLeft }}
             {{end}}
             {{end}}
             {{end}}

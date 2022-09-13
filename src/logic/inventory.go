@@ -6,6 +6,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	"github.com/Masterminds/sprig/v3"
 )
 
 type recycleResponse struct {
@@ -18,18 +20,16 @@ type recycleTarget struct {
 }
 
 func ShowInventory(w http.ResponseWriter, r *http.Request) {
-	tpl, err := template.ParseFiles(
+	tpl := template.Must(template.New("inventory.html").Funcs(sprig.FuncMap()).ParseFiles(
 		templatePath+"inventory.html",
 		templatePath+"navbar.html",
 		templatePath+"_parts/head.html",
 		templatePath+"_parts/footer.html",
-		templatePath+"_parts/js.html")
-	if err != nil {
-		log.Panic(err)
-	}
+		templatePath+"_parts/js.html"))
+
 	connectedUser, exists := getConnectedUser(w, r)
 	if exists {
-		err = tpl.Execute(w, connectedUser)
+		err := tpl.Execute(w, connectedUser)
 		if err != nil {
 			log.Panicln(err)
 		}
