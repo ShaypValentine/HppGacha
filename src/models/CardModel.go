@@ -11,4 +11,5 @@ type Card struct {
 	Weight           uint
 	CardsInInventory []CardInInventory
 	IsShadowCard     bool `gorm:"default:false"`
+	IsEventCard     uint `gorm:"default:0"`
 }

@@ -62,6 +62,10 @@ func ProcessCard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panic(err)
 	}
+	cardEvent, err := strconv.Atoi(r.PostFormValue("event"))
+	if err != nil {
+		log.Panic(err)
+	}
 	pathToFile := strings.ToLower(strings.ReplaceAll(cardName, " ", "_"))
 	file, header, err := r.FormFile("cardImage")
 	fileName := header.Filename
@@ -86,7 +90,7 @@ func ProcessCard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panic(err)
 	}
-	newCard := models.Card{Cardname: cardName, Rarity: uint(cardRarity), Weight: uint(cardWeight), Avatar: pathToFile + ext, IsShadowCard: cardShadow}
+	newCard := models.Card{Cardname: cardName, Rarity: uint(cardRarity), Weight: uint(cardWeight), Avatar: pathToFile + ext, IsShadowCard: cardShadow, IsEventCard: uint(cardEvent)}
 	err = DB.Create(&newCard).Error
 	if err != nil {
 		log.Panic(err)
