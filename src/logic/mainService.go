@@ -75,15 +75,21 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 				connectedUser.AvailableRolls--
 				DB.Save(&connectedUser)
 				addToInventory(connectedUser, rolledItem)
+				rolledCard.User = connectedUser
+				rolledCard.Card = rolledItem.Card
+				err = tpl.Execute(w, rolledCard)
+				if err != nil {
+					log.Panicln(err)
+				}
+			}
+		} else {
+			rolledCard.User = connectedUser
+			rolledCard.Card = rolledItem.Card
+			err = tpl.Execute(w, rolledCard)
+			if err != nil {
+				log.Panicln(err)
 			}
 		}
-		rolledCard.User = connectedUser
-		rolledCard.Card = rolledItem.Card
-		err = tpl.Execute(w, rolledCard)
-		if err != nil {
-			log.Panicln(err)
-		}
-
 	}
 
 }
@@ -92,10 +98,10 @@ func LoginPageHandler(w http.ResponseWriter, request *http.Request) {
 	errorGet := request.URL.Query().Get("error")
 	errorText := ErrorString[errorGet]
 	tpl, err := template.ParseFiles(templatePath+"loginForm.html",
-	templatePath+"navbar.html",
-	templatePath+"_parts/head.html",
-	templatePath+"_parts/footer.html",
-	templatePath+"_parts/js.html")
+		templatePath+"navbar.html",
+		templatePath+"_parts/head.html",
+		templatePath+"_parts/footer.html",
+		templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -108,10 +114,10 @@ func InscriptionPageHandler(w http.ResponseWriter, request *http.Request) {
 	errorGet := request.URL.Query().Get("error")
 	errorText := ErrorString[errorGet]
 	tpl, err := template.ParseFiles(templatePath+"inscriptionForm.html",
-	templatePath+"navbar.html",
-	templatePath+"_parts/head.html",
-	templatePath+"_parts/footer.html",
-	templatePath+"_parts/js.html")
+		templatePath+"navbar.html",
+		templatePath+"_parts/head.html",
+		templatePath+"_parts/footer.html",
+		templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panicln(err)
 	}
