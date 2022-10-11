@@ -66,6 +66,7 @@ func EmptyEntries() {
 	entries = nil
 	shadowEntries = nil
 	accumulatedWeight = 0
+	shadowWeight = 0
 }
 
 func DatabaseConnection() (*gorm.DB, error) {
