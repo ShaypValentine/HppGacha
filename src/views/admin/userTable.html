@@ -8,11 +8,8 @@
 </head>
 
 <body>
-    <ul>
-        <li><a href="/admin">Home</a></li>
-        <li><a href="/admin/new_card">New card</a></li>
-        <li><a class="active" href="/admin/show_users">See users</a></li>
-    </ul>
+    {{template "navbar_admin_users"}}
+
     <div class="side">
         <table id="users">
             <thead>

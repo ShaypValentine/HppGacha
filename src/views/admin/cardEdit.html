@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HppGacha Admin</title>
+    <link rel="stylesheet" href="/ressources/css/admin.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    {{template "navbar_admin_cards"}}
+    <div class="side">
+        <form action="/admin/process_card_edit" method="POST" enctype="multipart/form-data">
+            <label>
+                Cardname :
+                <input placeholder="Card name" name="cardName" type="text" value="{{.Cardname}}" />
+            </label>
+            <label>
+                Weight :
+                <input placeholder="Weight 1 - 50" name="weight" type="number" value="{{ .Weight}}" />
+            </label>
+            <label>
+                Rarity :
+                <input placeholder="Rarity 1 - 2 " name="rarity" type="number" value="{{.Rarity}}" />
+            </label>
+
+            <fieldset>
+                <legend>
+                    Type de roll
+                </legend>
+                <label>
+                    Normal
+                    <input {{ if not .IsShadowCard }} checked {{end}} name="shadow" value="0" type="radio" />
+                </label>
+
+                <label> Shadow
+                    <input {{ if .IsShadowCard }} checked {{end}} name="shadow" value="1" type="radio" />
+                </label>
+            </fieldset>
+            <fieldset>
+                <legend>
+                    Carte événement
+                </legend>
+                <label>
+                    Non
+                    <input {{ if eq .IsEventCard 0}} checked {{end}} name="event" value="0" type="radio" />
+                </label>
+
+                <label> Halloween
+                    <input {{ if eq .IsEventCard 1}} checked {{end}} name="event" value="1" type="radio" />
+                </label>
+                <label> Noel
+                    <input {{ if eq .IsEventCard 2}} checked {{end}} name="event" value="2" type="radio" />
+                </label>
+            </fieldset>
+            <input type="hidden" name="cardID" value="{{.ID}}"/>
+            <input type="submit" />
+        </form>
+    </div>
+</body>
+
+</html>

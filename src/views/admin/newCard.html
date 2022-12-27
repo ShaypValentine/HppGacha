@@ -8,11 +8,8 @@
 </head>
 
 <body>
-    <ul>
-        <li><a href="/admin">Home</a></li>
-        <li><a class="active" href="/admin/new_card">New card</a></li>
-        <li><a href="/admin/show_users">See users</a></li>
-    </ul>
+    {{template "navbar_admin_new_card"}}
+
     <div class="side">
         <form action="/admin/process_card" method="POST" enctype="multipart/form-data">
             <input placeholder="Card name" name="cardName" type="text" />

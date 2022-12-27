@@ -43,8 +43,11 @@ func main() {
 	http.HandleFunc("/", logic.Index)
 	http.HandleFunc("/adminw", admin.Index)
 	http.HandleFunc("/admin/new_card", admin.NewCard)
+	http.HandleFunc("/admin/edit_card", admin.EditCard)
 	http.HandleFunc("/admin/show_users", admin.ShowUser)
+	http.HandleFunc("/admin/show_cards", admin.ShowCards)
 	http.HandleFunc("/admin/process_card", admin.ProcessCard)
+	http.HandleFunc("/admin/process_card_edit", admin.ProcessCardEdit)
 	http.HandleFunc("/shadow/portal", logic.ShadowIndex)
 	// Launch app on OS PORT var or 8008
 	env := os.Getenv("LOCALENV")

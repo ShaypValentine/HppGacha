@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HppGacha Admin</title>
+    <link rel="stylesheet" href="/ressources/css/admin.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    {{template "navbar_admin_cards"}}
+    <div class="side">
+        There is {{ len .}} cards
+        <table id="users">
+            <thead>
+                <tr>
+                    <th>Card name</th>
+                    <th>Rarity</th>
+                    <th>Weight</th>
+                    <th>Shadow card</th>
+                    <th>Event card</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ if .}}
+                {{ range .}}
+                <tr>
+                    <td>{{ .Cardname }}</td>
+                    <td>{{ .Rarity }}</td>
+                    <td>{{ .Weight }}</td>
+                    <td>{{ .IsShadowCard }}</td>
+                    <td>{{ .IsEventCard }}</td>
+                    <td><button onclick="location.href='/admin/edit_card?id={{ .ID}}'">Edit</button></td>
+                </tr>
+                {{end}}
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
