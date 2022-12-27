@@ -66,7 +66,7 @@
         </div>
     </div>
     x <span id="{{ .Card.ID }}-quantity">{{ .Quantity}}</span>
-    <button class="uk-button-small uk-button-secondary uk-margin-small-top" {{ if eq .Quantity 1 }} disabled {{end}}
+    <button class="uk-button-small uk-button-secondary uk-margin-small-top" {{ if lt .Quantity 4 }} disabled {{end}}
         type="button">Actions</button>
     <div class="uk-light uk-background-secondary " uk-dropdown="mode: click;">
         <ul class="uk-nav uk-dropdown-nav">
