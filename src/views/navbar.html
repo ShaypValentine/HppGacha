@@ -24,7 +24,10 @@
     {{ if .User.Username }}
     <div class="uk-navbar-right uk-margin-large-right">
         <ul class="uk-navbar-nav">
-            <li> Connected as : {{ .User.Username }}</li>
+            <li>Connected as : {{ .User.Username }}</li>
+        </ul>
+        <ul class="uk-navbar-nav">
+            <li><a href="/disconnect">Disconnect</a></li>
         </ul>
     </div>
     {{end}}

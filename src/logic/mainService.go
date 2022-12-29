@@ -213,3 +213,23 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 	})
 	http.Redirect(w, r, "/", http.StatusFound)
 }
+
+func Disconnect(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			// If the cookie is not set, return an unauthorized status
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+	}
+	sessionToken := c.Value
+	// remove the users session from the session map
+	delete(sessions, sessionToken)
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_token",
+		Value:   "",
+		Expires: time.Now(),
+	})
+	http.Redirect(w, r, "/", http.StatusFound)
+}
