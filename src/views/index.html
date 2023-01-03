@@ -10,18 +10,19 @@
 
         </div>
         <div class="grid-center">
-            <h1></h1>
             {{ if .User.Username }}
-            <div>
+            {{ template "slider" .}}
+            <div class="centered">
+                <div>Time before new roll : <span id="timerToRoll"></span></div>
+                <button class="uk-button uk-button-secondary uk-width-1-2" id="roll" onclick="debouncedRoll()">Roll :
+                    <span data-rolls="{{.User.AvailableRolls}}" id="availableRolls">{{.User.AvailableRolls}}</span>
+                </button>
 
-                Time before new roll : <span id="timerToRoll"></span>
+                {{ else }}
+                <button class="uk-button uk-button-secondary uk-width-1-2" id="roll"
+                    onclick="debouncedRoll()">Roll</button>
+                {{ end }}
             </div>
-            <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="debouncedRoll()">Roll : <span
-                    data-rolls="{{.User.AvailableRolls}}" id="availableRolls">{{.User.AvailableRolls}}</span> </button>
-
-            {{ else }}
-            <button class="uk-button uk-button-secondary uk-width-1-1" id="roll" onclick="debouncedRoll()">Roll</button>
-            {{ end }}
         </div>
         <div class="grid-right">
 
@@ -34,7 +35,7 @@
             <p><b>Update 14</b> A strange portal appeared!</p>
             <p><b>Update 13</b> Legendary cards are now available !</p>
             <p><b>Update 12</b> Back of cards is out !</p>
-            <p><b>Update 11</b> Filters and Sorting  is out !</p>
+            <p><b>Update 11</b> Filters and Sorting is out !</p>
         </div>
         <div>
 
@@ -62,13 +63,7 @@
             </table>
         </div>
         <div>
-            <div class="strawpoll-embed" id="strawpoll_GeZANJAAbyV"
-            style="height: 900px; max-width: 640px; width: 100%; margin: 0 auto; display: flex; flex-direction: column;">
-            <iframe title="StrawPoll Embed" src="https://strawpoll.com/embed/polls/GeZANJAAbyV"
-                style="position: static; visibility: visible; display: block; width: 100%; flex-grow: 1;" frameborder="0"
-                allowfullscreen allowtransparency>Loading...</iframe>
-            <script async src="https://cdn.strawpoll.com/dist/widgets.js" charset="utf-8"></script>
-        </div>
+            A new poll will be available soon.
         </div>
     </div>
 

@@ -21,6 +21,7 @@ func main() {
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.CardInInventory{})
 	db.AutoMigrate(&models.ShadowPortal{})
+	db.AutoMigrate(&models.Banner{})
 
 	logic.DataToRoll(db)
 	fileServer := http.FileServer(neuteredFileSystem{http.Dir("src/ressources")})
@@ -75,6 +76,9 @@ func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
 	}
 
 	s, err := f.Stat()
+	if err != nil {
+		return nil, err
+	}
 	if s.IsDir() {
 		index := filepath.Join(path, "index.html")
 		if _, err := nfs.fs.Open(index); err != nil {

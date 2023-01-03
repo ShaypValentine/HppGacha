@@ -12,4 +12,5 @@ type Card struct {
 	CardsInInventory []CardInInventory
 	IsShadowCard     bool `gorm:"default:false"`
 	IsEventCard     uint `gorm:"default:0"`
+	Banners []Banner `gorm:"many2many:banner_cards;"`
 }

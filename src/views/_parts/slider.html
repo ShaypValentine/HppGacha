@@ -1,0 +1,21 @@
+{{ define "slider" }}
+<br>
+<div class="uk-position-relative uk-visible-toggle uk-dark" tabindex="-1" uk-slider="center: true">
+    <div class="uk-slider-container uk-dark">
+        <ul class="uk-slider-items uk-grid">
+            {{ range .Banners }}
+            <li data-id='{{.ID}}'>
+                
+                <div class="uk-panel centered">
+                    <img src="ressources/pics/{{ .BannerImage}}" alt="">
+                    <p>{{.Bannername}}</p>
+                </div>
+            </li>
+            {{end}}
+        </ul>
+    </div>
+    <a class="uk-position-center-left  " href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+    <a class="uk-position-center-right" href="#" uk-slidenav-next uk-slider-item="next"></a>
+    <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+</div>
+{{ end }}

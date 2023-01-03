@@ -19,8 +19,9 @@ body {
 .grid-center {
   place-content: center;
 }
-
-#roll,
+.centered{
+  text-align: center;
+}
 #homeBtn {
   width: 100%;
 }

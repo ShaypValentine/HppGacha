@@ -26,6 +26,7 @@ type IndexInfo struct {
 	Inventory     models.Inventory
 	TopCollectors []TopCollector
 	MaxCards      int64
+	Banners       []models.Banner
 }
 
 type TopCollector struct {
@@ -45,6 +46,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		templatePath+"navbar.html",
 		templatePath+"_parts/head.html",
 		templatePath+"_parts/footer.html",
+		templatePath+"_parts/slider.html",
 		templatePath+"_parts/js.html")
 	if err != nil {
 		log.Panicln(err)
@@ -52,6 +54,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	connectedUser, _ := getConnectedUser(w, r)
 	indexInfos.User = connectedUser
 	indexInfos = getTopCollectors(indexInfos)
+	indexInfos = getBanners(indexInfos)
 
 	err = tpl.Execute(w, indexInfos)
 	if err != nil {

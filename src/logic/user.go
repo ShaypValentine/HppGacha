@@ -106,3 +106,13 @@ func getTopCollectors(infos IndexInfo) IndexInfo {
 	}
 	return infos
 }
+
+func getBanners(infos IndexInfo) IndexInfo {
+	var banners []models.Banner
+	result := DB.Where("is_available = true").Find(&banners)
+	if result.Error != nil {
+		log.Panic(result.Error)
+	}
+	infos.Banners = banners
+	return infos
+}
