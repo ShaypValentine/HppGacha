@@ -4,10 +4,10 @@
     <div class="uk-slider-container uk-dark">
         <ul class="uk-slider-items uk-grid">
             {{ range .Banners }}
-            <li data-id='{{.ID}}'>
+            <li class="banner-slider" data-id='{{.ID}}'>
                 
                 <div class="uk-panel centered">
-                    <img src="ressources/pics/{{ .BannerImage}}" alt="">
+                    <img width="320" height="320" src="ressources/pics/{{ .BannerImage}}" alt="">
                     <p>{{.Bannername}}</p>
                 </div>
             </li>

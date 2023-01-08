@@ -10,19 +10,21 @@
 
         </div>
         <div class="grid-center">
-            {{ if .User.Username }}
             {{ template "slider" .}}
+            {{ if .User.Username }}
             <div class="centered">
                 <div>Time before new roll : <span id="timerToRoll"></span></div>
                 <button class="uk-button uk-button-secondary uk-width-1-2" id="roll" onclick="debouncedRoll()">Roll :
                     <span data-rolls="{{.User.AvailableRolls}}" id="availableRolls">{{.User.AvailableRolls}}</span>
                 </button>
-
+            </div>
                 {{ else }}
+                <div class="centered">
+
                 <button class="uk-button uk-button-secondary uk-width-1-2" id="roll"
                     onclick="debouncedRoll()">Roll</button>
+                </div>
                 {{ end }}
-            </div>
         </div>
         <div class="grid-right">
 
@@ -32,6 +34,7 @@
     </div>
     <div class="uk-text-center uk-child-width-1-2@s uk-margin-small-bottom" uk-grid="masonry: true">
         <div>
+            <p><b>Update 17</b> Banners are here ! </p>
             <p><b>Update 14</b> A strange portal appeared!</p>
             <p><b>Update 13</b> Legendary cards are now available !</p>
             <p><b>Update 12</b> Back of cards is out !</p>

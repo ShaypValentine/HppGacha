@@ -15,12 +15,14 @@ import (
 type Entry struct {
 	Card              models.Card
 	AccumulatedWeight uint
+	BannerID          uint
 }
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
+var BannersWeight = make(map[uint]uint)
 var accumulatedWeight uint
 var shadowWeight uint
 var entries []Entry
@@ -35,17 +37,29 @@ func AddEntry(card models.Card) {
 		shadowEntry.AccumulatedWeight = shadowWeight
 		shadowEntries = append(shadowEntries, shadowEntry)
 	} else {
-		entry.Card = card
 		accumulatedWeight += card.Weight
-		entry.AccumulatedWeight = accumulatedWeight
-		entries = append(entries, entry)
+		if len(card.Banners) > 0 {
+			for _, banner := range card.Banners {
+				entry.Card = card
+				BannersWeight[banner.ID] += card.Weight
+				entry.AccumulatedWeight = BannersWeight[banner.ID]
+				entry.BannerID = banner.ID
+				entries = append(entries, entry)
+			}
+		}
 	}
 
 }
 
-func getRandom() Entry {
-	r := rand.Intn(1 * int(accumulatedWeight))
+func getRandom(bannerID uint) Entry {
+	var entriesBanner []Entry
 	for _, entry := range entries {
+		if bannerID == entry.BannerID {
+			entriesBanner = append(entriesBanner, entry)
+		}
+	}
+	r := rand.Intn(1 * int(BannersWeight[bannerID]))
+	for _, entry := range entriesBanner {
 		if int(entry.AccumulatedWeight) >= r {
 			return entry
 		}
@@ -76,7 +90,7 @@ func DatabaseConnection() (*gorm.DB, error) {
 
 func DataToRoll(db *gorm.DB) {
 	var cards []models.Card
-	err := db.Find(&cards).Error
+	err := db.Model(&models.Card{}).Preload("Banners").Find(&cards).Error
 	if err != nil {
 		log.Panic(err)
 	}

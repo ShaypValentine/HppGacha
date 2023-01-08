@@ -1,5 +1,6 @@
 function roll() {
     var rollBtn = document.getElementById("roll")
+    var activeBanner = document.getElementsByClassName("uk-active banner-slider")[0].dataset.id;
     rollBtn.disabled = true
     if (isConnectedAndCookieExpired()) {
         window.location.replace(window.location.href);
@@ -13,7 +14,18 @@ function roll() {
             rolls = counterAvailableRoll.dataset.rolls
         }
         if (rolls > 0 || isGuest) {
-            fetch('/roll').then(function (response) {
+            let data = {
+                banner_id: activeBanner
+            }
+            let fetchData = {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: new Headers({
+                    'Content-Type': 'application/json; charset=utf-8'
+                })
+            }
+            fetch('/roll', fetchData
+            ).then(function (response) {
                 return response.text()
             }).then(function (html) {
                 let rolled = document.getElementById("rolled")

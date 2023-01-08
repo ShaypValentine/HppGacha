@@ -1,10 +1,12 @@
 package logic
 
 import (
+	"encoding/json"
 	models "hppGacha/src/models"
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -39,6 +41,10 @@ type RolledCard struct {
 	User models.User
 }
 
+type RollInfo struct {
+	BannerId string `json:"banner_id"`
+}
+
 func Index(w http.ResponseWriter, r *http.Request) {
 	var indexInfos IndexInfo
 	tpl, err := template.ParseFiles(
@@ -68,9 +74,19 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panicln(err)
 	}
-	if r.Method == "GET" {
+	if r.Method == "POST" {
+		decoder := json.NewDecoder(r.Body)
+		var bannerInfo RollInfo
+		err := decoder.Decode(&bannerInfo)
+		if err != nil {
+			log.Panicln(err)
+		}
 		w.Header().Set("Content-Type", "application/json")
-		rolledItem := getRandom()
+		bannerID, err := strconv.ParseUint(bannerInfo.BannerId, 10, 32)
+		if err != nil {
+			log.Panicln(err)
+		}
+		rolledItem := getRandom(uint(bannerID))
 		connectedUser, exists := getConnectedUser(w, r)
 		if exists {
 			Refresh(w, r)
