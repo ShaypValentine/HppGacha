@@ -9,7 +9,6 @@
 
 <body>
     {{template "navbar_admin_new_card"}}
-
     <div class="side">
         <form action="/admin/process_card" method="POST" enctype="multipart/form-data">
             <input placeholder="Card name" name="cardName" type="text" />
@@ -43,6 +42,18 @@
                 <label> Noel
                     <input name="event" value="2" type="radio" />
                 </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>
+                    Banners
+                </legend>
+                {{ range .}}
+                <label>
+                    <input type="checkbox" name="banners" value="{{.ID}}" />
+                    {{.Bannername}}
+                </label>
+                {{end}}
             </fieldset>
             <input placeholder="Card Image" name="cardImage" type="file" />
             <input type="submit" />

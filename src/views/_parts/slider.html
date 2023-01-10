@@ -5,10 +5,10 @@
         <ul class="uk-slider-items uk-grid">
             {{ range .Banners }}
             <li class="banner-slider" data-id='{{.ID}}'>
-                
+
                 <div class="uk-panel centered">
                     <img width="320" height="320" src="ressources/pics/{{ .BannerImage}}" alt="">
-                    <p>{{.Bannername}}</p>
+                    <p>{{.Bannername}} <i onclick="bannerList('{{.ID}}')" class="fa fa-question-circle"></i> </p>
                 </div>
             </li>
             {{end}}

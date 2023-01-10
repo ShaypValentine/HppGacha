@@ -35,7 +35,9 @@ func NewCard(w http.ResponseWriter, r *http.Request) {
 		templateAdminPath+"newCard.html",
 		templateAdminPath+"adminNavBar.html"))
 
-	err := tpl.Execute(w, nil)
+	var banners []models.Banner
+	DB.Find(&banners)
+	err := tpl.Execute(w, banners)
 	if err != nil {
 		log.Panicln(err)
 	}

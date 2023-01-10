@@ -236,6 +236,9 @@ if (document.getElementById("timerToRoll") != null) {
     }, 1000);
 }
 
+function bannerList(id) {
+    console.log(id);
+}
 
 document.addEventListener('click', function (event) {
 
