@@ -3,7 +3,7 @@
 {{ define "card"}}
 <div class="tag-common" data-name="{{.inventory.Card.Cardname}}" data-quantity="{{.inventory.Quantity}}">
     <div class="card">
-        <img class="imgResize" src="ressources/pics/{{ .inventory.Card.Avatar }}" alt="{{.inventory.Card.Cardname}}">
+        <img loading="lazy" class="imgResize" src="ressources/pics/{{ .inventory.Card.Avatar }}" alt="{{.inventory.Card.Cardname}}">
         <div class="container">
             <h4><b>{{ .inventory.Card.Cardname }}</b></h4>
 
@@ -31,7 +31,7 @@
 <div class="tag-rare" data-name="{{.inventory.Card.Cardname}}" data-quantity="{{.inventory.Quantity}}">
     <div class="rare-card-container-inventory">
         <div class="rare-card-inventory">
-            <img class="imgResize" src="ressources/pics/{{ .inventory.Card.Avatar }}" alt="{{.inventory.Card.Cardname}}">
+            <img class="imgResize" loading="lazy" src="ressources/pics/{{ .inventory.Card.Avatar }}" alt="{{.inventory.Card.Cardname}}">
         </div>
         <div class="rare-container">
             <h4> <b>{{.inventory.Card.Cardname}}</b></h4>
@@ -59,7 +59,7 @@
 <div class="tag-legendary" data-name="{{.Card.Cardname}}" data-quantity="{{.Quantity}}">
     <div class="legendary-card-container-inventory">
         <div class="legendary-card-inventory">
-            <img class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
+            <img loading="lazy" class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
         </div>
         <div class="legendary-container">
             <h4><b class="rainbow_text_animated">{{.Card.Cardname}}</b></h4>
@@ -83,7 +83,7 @@
 <div class="tag-shadow" data-name="{{.Card.Cardname}}" data-quantity="{{.Quantity}}">
     <div class="shadow-card-container-inventory">
         <div class="shadow-card-inventory">
-            <img class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
+            <img loading="lazy" class="imgResize" src="ressources/pics/{{ .Card.Avatar }}" alt="{{.Card.Cardname}}">
         </div>
         <div class="shadow-container">
             <h4><b class="shadow_rainbow_text_animated">{{.Card.Cardname}}</b></h4>
