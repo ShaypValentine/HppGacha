@@ -51,6 +51,7 @@ func main() {
 	http.HandleFunc("/admin/process_card_edit", admin.ProcessCardEdit)
 	http.HandleFunc("/shadow/portal", logic.ShadowIndex)
 	http.HandleFunc("/disconnect", logic.Disconnect)
+	http.HandleFunc("/banner_list", logic.BannerList)
 
 	// Launch app on OS PORT var or 8008
 	env := os.Getenv("LOCALENV")

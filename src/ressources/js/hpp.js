@@ -28,6 +28,7 @@ function roll() {
             ).then(function (response) {
                 return response.text()
             }).then(function (html) {
+                console.log(html)
                 let rolled = document.getElementById("rolled")
                 let cards = document.getElementsByClassName("cardcount")
                 if (cards.length >= 8) {
@@ -237,7 +238,26 @@ if (document.getElementById("timerToRoll") != null) {
 }
 
 function bannerList(id) {
-    console.log(id);
+    let data = {
+        banner_id: id
+    }
+    let fetchData = {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: new Headers({
+            'Content-Type': 'application/json; charset=utf-8'
+        })
+    }
+    fetch('/banner_list', fetchData
+    ).then(function (response) {
+        return response.text()
+    }).then(function (html) {
+        console.log(html)
+        let infos = document.getElementById("banner-table")
+        infos.innerHTML = html; 
+    }).catch(function (err) {
+        console.warn(err)
+    })
 }
 
 document.addEventListener('click', function (event) {

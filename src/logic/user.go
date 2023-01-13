@@ -21,6 +21,12 @@ type session struct {
 	expiry time.Time
 }
 
+type BannerInfos struct {
+	User      models.User
+	Inventory models.Inventory
+	Cards     []models.Card
+}
+
 var sessions = map[string]session{}
 
 func addToInventory(connectedUser models.User, entry Entry) {
@@ -114,5 +120,15 @@ func getBanners(infos IndexInfo) IndexInfo {
 		log.Panic(result.Error)
 	}
 	infos.Banners = banners
+	return infos
+}
+
+func getBannerCards(infos BannerInfos, bannerId uint) BannerInfos {
+	var banner models.Banner
+	result := DB.Preload("Cards").Find(&banner, bannerId)
+	if result.Error != nil {
+		log.Panic(result.Error)
+	}
+	infos.Cards = banner.Cards
 	return infos
 }

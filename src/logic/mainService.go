@@ -252,3 +252,41 @@ func Disconnect(w http.ResponseWriter, r *http.Request) {
 	})
 	http.Redirect(w, r, "/", http.StatusFound)
 }
+
+func BannerList(w http.ResponseWriter, r *http.Request) {
+	tpl, err := template.New("bannerInfos.html").Funcs(template.FuncMap{"mod": func(i, j int) bool { return i%j == 0 }}).ParseFiles("src/views/bannerInfos.html")
+
+	if err != nil {
+		log.Panicln(err)
+	}
+	if r.Method == "POST" {
+		decoder := json.NewDecoder(r.Body)
+		var clicInfo RollInfo
+		err := decoder.Decode(&clicInfo)
+		if err != nil {
+			log.Panicln(err)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		bannerID, err := strconv.ParseUint(clicInfo.BannerId, 10, 32)
+
+		if err != nil {
+			log.Panicln(err)
+		}
+
+		var bannerInfos BannerInfos
+		bannerInfos.User, _ = getConnectedUser(w, r)
+		bannerInfos = getBannerCards(bannerInfos, uint(bannerID))
+		for i, card := range bannerInfos.Cards {
+			for _, inv := range bannerInfos.User.CardsInInventory {
+				if inv.Card.ID == card.ID {
+					card.Rarity = 99
+					bannerInfos.Cards[i] = card
+				}
+			}
+		}
+		err = tpl.Execute(w, bannerInfos)
+		if err != nil {
+			log.Panicln(err)
+		}
+	}
+}

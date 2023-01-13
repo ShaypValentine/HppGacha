@@ -1,0 +1,78 @@
+{{define "common"}}
+<td style="background-color: antiquewhite;">{{.Cardname}}</td>
+{{end}}
+
+{{define "rare"}}
+<td style="background-color: rgb(126, 145, 204);">{{.Cardname}}</td>
+{{end}}
+
+{{define "legendary"}}
+<td style="background-color: rgb(226, 208, 46);">{{.Cardname}}</td>
+{{end}}
+
+{{define "owned"}}
+<td style="background-color: rgb(133, 204, 148);">{{.Cardname}}</td>
+{{end}}
+<style>
+    /* basic positioning */
+    .legend {
+        list-style: none;
+    }
+
+    .legend li {
+        float: left;
+        margin-right: 10px;
+    }
+
+    .legend span {
+        border: 1px solid #ccc;
+        float: left;
+        width: 12px;
+        height: 12px;
+        margin: 2px;
+    }
+
+    /* your colors */
+    .legend .owned {
+        background-color: rgb(133, 204, 148);
+    }
+
+    .legend .common {
+        background-color: antiquewhite;
+    }
+
+    .legend .rare {
+        background-color: rgb(126, 145, 204);
+    }
+
+    .legend .legendary {
+        background-color: rgb(226, 208, 46);
+    }
+</style>
+<ul class="legend">
+    <li><span class="owned"></span>Owned</li>
+    <li><span class="common"></span>Common</li>
+    <li><span class="rare"></span>Rare</li>
+    <li><span class="legendary"></span> Legendary</li>
+</ul>
+<table class="uk-table uk-table-divider" style="background-color: white;">
+    {{ if .Cards}}
+    <tr>
+        {{ range $i, $card := .Cards }}
+        {{ if mod $i 4}}
+    </tr>
+    <tr>
+        {{end}}
+
+        {{ if eq $card.Rarity 2}}
+        {{ template "rare" $card }}
+        {{ else if eq $card.Rarity 3}}
+        {{ template "legendary" $card }}
+        {{ else if eq $card.Rarity 99}}
+        {{ template "owned" $card}}
+        {{ else }}
+        {{ template "common" $card }}
+        {{end}}
+        {{end}}
+        {{end}}
+</table>

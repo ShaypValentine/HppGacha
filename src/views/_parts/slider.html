@@ -8,7 +8,7 @@
 
                 <div class="uk-panel centered">
                     <img width="320" height="320" src="ressources/pics/{{ .BannerImage}}" alt="">
-                    <p>{{.Bannername}} <i onclick="bannerList('{{.ID}}')" class="fa fa-question-circle"></i> </p>
+                    <p>{{.Bannername}} <i uk-toggle="target: #banner-info" onclick="bannerList('{{.ID}}')" class="fa fa-question-circle"></i> </p>
                 </div>
             </li>
             {{end}}

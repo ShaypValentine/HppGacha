@@ -81,6 +81,7 @@ func EmptyEntries() {
 	shadowEntries = nil
 	accumulatedWeight = 0
 	shadowWeight = 0
+	BannersWeight = make(map[uint]uint)
 }
 
 func DatabaseConnection() (*gorm.DB, error) {
