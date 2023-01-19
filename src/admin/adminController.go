@@ -19,6 +19,11 @@ import (
 var DB *gorm.DB
 var templateAdminPath = "src/views/admin/"
 
+type InfoForEdit struct {
+	Card    models.Card
+	Banners []models.Banner
+}
+
 func Index(w http.ResponseWriter, r *http.Request) {
 	tpl := template.Must(template.New("indexAdmin.html").Funcs(sprig.FuncMap()).ParseFiles(
 		templateAdminPath+"indexAdmin.html",
@@ -51,12 +56,22 @@ func EditCard(w http.ResponseWriter, r *http.Request) {
 	value := r.FormValue("id")
 
 	var card models.Card
-	err := DB.First(&card, value).Error
+	err := DB.Preload("Banners").First(&card, value).Error
 	if err != nil {
 		log.Panic(err)
 	}
 
-	err = tpl.Execute(w, card)
+	var banners []models.Banner
+	err = DB.Find(&banners).Error
+	if err != nil {
+		log.Panic(err)
+	}
+
+	var infoForEdit InfoForEdit
+	infoForEdit.Card = card
+	infoForEdit.Banners = banners
+
+	err = tpl.Execute(w, infoForEdit)
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -143,6 +158,16 @@ func ProcessCard(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panic(err)
 	}
+
+	for _, banner := range r.Form["banners"] {
+		println(banner)
+		bannerID, err := strconv.ParseUint(banner, 10, 32)
+		if err != nil {
+			log.Panic(err)
+		}
+		DB.Model(&newCard).Association("Banners").Append(&models.Banner{ID: uint(bannerID)})
+	}
+
 	logic.AddEntry(newCard)
 	http.Redirect(w, r, "/admin/new_card", http.StatusFound)
 }
@@ -183,6 +208,14 @@ func ProcessCardEdit(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panic(err)
 	}
+	var bannersCard []models.Banner
+	for _, banner := range r.Form["banners"] {
+		var bannerObj models.Banner
+		DB.First(&bannerObj, banner)
+		bannersCard = append(bannersCard, bannerObj)
+	}
+	DB.Model(&card).Association("Banners").Replace(bannersCard)
+
 	logic.EmptyEntries()
 	logic.DataToRoll(DB)
 	http.Redirect(w, r, "/admin/show_cards", http.StatusFound)

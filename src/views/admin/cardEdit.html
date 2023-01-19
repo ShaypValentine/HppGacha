@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -9,19 +10,20 @@
 
 <body>
     {{template "navbar_admin_cards"}}
+    {{$banners := .Card.Banners }}
     <div class="side">
         <form action="/admin/process_card_edit" method="POST" enctype="multipart/form-data">
             <label>
                 Cardname :
-                <input placeholder="Card name" name="cardName" type="text" value="{{.Cardname}}" />
+                <input placeholder="Card name" name="cardName" type="text" value="{{.Card.Cardname}}" />
             </label>
             <label>
                 Weight :
-                <input placeholder="Weight 1 - 50" name="weight" type="number" value="{{ .Weight}}" />
+                <input placeholder="Weight 1 - 50" name="weight" type="number" value="{{ .Card.Weight}}" />
             </label>
             <label>
                 Rarity :
-                <input placeholder="Rarity 1 - 2 " name="rarity" type="number" value="{{.Rarity}}" />
+                <input placeholder="Rarity 1 - 2 " name="rarity" type="number" value="{{.Card.Rarity}}" />
             </label>
 
             <fieldset>
@@ -30,11 +32,11 @@
                 </legend>
                 <label>
                     Normal
-                    <input {{ if not .IsShadowCard }} checked {{end}} name="shadow" value="0" type="radio" />
+                    <input {{ if not .Card.IsShadowCard }} checked {{end}} name="shadow" value="0" type="radio" />
                 </label>
 
                 <label> Shadow
-                    <input {{ if .IsShadowCard }} checked {{end}} name="shadow" value="1" type="radio" />
+                    <input {{ if .Card.IsShadowCard }} checked {{end}} name="shadow" value="1" type="radio" />
                 </label>
             </fieldset>
             <fieldset>
@@ -43,17 +45,28 @@
                 </legend>
                 <label>
                     Non
-                    <input {{ if eq .IsEventCard 0}} checked {{end}} name="event" value="0" type="radio" />
+                    <input {{ if eq .Card.IsEventCard 0}} checked {{end}} name="event" value="0" type="radio" />
                 </label>
 
                 <label> Halloween
-                    <input {{ if eq .IsEventCard 1}} checked {{end}} name="event" value="1" type="radio" />
+                    <input {{ if eq .Card.IsEventCard 1}} checked {{end}} name="event" value="1" type="radio" />
                 </label>
                 <label> Noel
-                    <input {{ if eq .IsEventCard 2}} checked {{end}} name="event" value="2" type="radio" />
+                    <input {{ if eq .Card.IsEventCard 2}} checked {{end}} name="event" value="2" type="radio" />
                 </label>
             </fieldset>
-            <input type="hidden" name="cardID" value="{{.ID}}"/>
+            <fieldset>
+                <legend>
+                    Banners
+                </legend>
+                {{ range $b := .Banners}}
+                <label>
+                    <input  {{ range $banner := $banners }} {{ if eq $banner.ID $b.ID}} checked {{end}} {{end}} type="checkbox" name="banners" value="{{$b.ID}}" />
+                    {{$b.Bannername}}
+                </label>
+                {{end}}
+            </fieldset>
+            <input type="hidden" name="cardID" value="{{.Card.ID}}" />
             <input type="submit" />
         </form>
     </div>
