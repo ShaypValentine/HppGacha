@@ -7,3 +7,4 @@ temp-pics/*
 !temp-pics/.gitkeep
 ressources/pics
 toInsertData.sql
+.env
