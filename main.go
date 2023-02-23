@@ -56,7 +56,7 @@ func main() {
 	// Launch app on OS PORT var or 8008
 	env := os.Getenv("LOCALENV")
 	if env == "prod" {
-		if err := http.ListenAndServeTLS(":443", "/persistent/server.crt", "/persistent/server.key", nil); err != nil {
+		if err := http.ListenAndServeTLS(":443", "persistent/server.crt", "persistent/server.key", nil); err != nil {
 			log.Panic(err)
 		}
 	} else {
