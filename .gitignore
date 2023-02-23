@@ -8,3 +8,4 @@ temp-pics/*
 ressources/pics
 toInsertData.sql
 .env
+persistent/hppgacha.db

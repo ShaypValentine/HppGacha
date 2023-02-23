@@ -6,6 +6,7 @@ import (
 	"time"
 
 	models "hppGacha/src/models"
+
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 )
@@ -83,7 +84,7 @@ func EmptyEntries() {
 }
 
 func DatabaseConnection() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open("hppgacha.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("../persistent/hppgacha.db"), &gorm.Config{})
 	return db, err
 }
 
