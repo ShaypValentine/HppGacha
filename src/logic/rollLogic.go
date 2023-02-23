@@ -84,7 +84,7 @@ func EmptyEntries() {
 }
 
 func DatabaseConnection() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open("../persistent/hppgacha.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("persistent/hppgacha.db"), &gorm.Config{})
 	return db, err
 }
 
