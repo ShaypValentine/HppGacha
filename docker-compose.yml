@@ -10,4 +10,5 @@ services:
     restart: unless-stopped
     volumes:
       - ./persistent:/app/persistent
+      - ./src/ressources/pics:/app/src/ressources/pics
   
