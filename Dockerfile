@@ -1,7 +1,10 @@
-FROM golang:1.20-alpine
+FROM golang:1.20-bullseye
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh openssl sqlite nano openrc busybox-openrc
+RUN apt update && apt upgrade  --yes
+RUN apt-get --yes install git 
+RUN apt-get --yes install nano
+RUN apt-get --yes install sqlite3
+RUN apt-get --yes install cron
 
 LABEL maintainer="ShaypValentine <shaycaith@gmail.com>"
 
@@ -15,10 +18,10 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . .
 
-# RUN (crontab -l ; echo "1	*	*	*	*	echo " ) | crontab -
-# RUN (crontab -l ; echo "0	1	*	*	*	 cp /app/persistent/hppgacha.db /app/persistent/hppgachaBackUp.db" ) | crontab -
-# RUN (crontab -l ; echo "0	*/2*	*	* sqlite3 /app/persistent/hppgacha.db \"UPDATE users SET available_rolls = available_rolls + 1 WHERE available_rolls< 4\"" ) | crontab -
-# RUN (crontab -l ; echo "0 11 */2 * * sqlite3 /app/persistent/hppgacha.db \"UPDATE shadow_portals SET available_shadow_rolls = available_shadow_rolls + 1 WHERE available_shadow_rolls < 2\"" ) | crontab -
+# RUN (crontab -u root -e)
+RUN echo "0 1 * * * root cp /app/persistent/hppgacha.db /app/persistent/hppgachaBackUp.db" >> /etc/crontab
+RUN echo "0 */2* * * root sqlite3 /app/persistent/hppgacha.db \"UPDATE users SET available_rolls = available_rolls + 1 WHERE available_rolls< 4\"" >> /etc/crontab
+RUN echo "0 11 */2 * * root sqlite3 /app/persistent/hppgacha.db \"UPDATE shadow_portals SET available_shadow_rolls = available_shadow_rolls + 1 WHERE available_shadow_rolls < 2\"" >> /etc/crontab
 # Build the Go app
 RUN go build -o main .
 
