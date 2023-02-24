@@ -1,7 +1,7 @@
 FROM golang:1.20-alpine
 
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh openssl
+    apk add --no-cache bash git openssh openssl sqlite
 
 LABEL maintainer="ShaypValentine <shaycaith@gmail.com>"
 
@@ -15,6 +15,9 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . .
 
+RUN (crontab -l ; echo "0 1 * * * cp /app/persistent/hppgacha.db /app/persistent/hppgachaBackUp.db" ) | crontab -
+RUN (crontab -l ; echo "0 */2 * * * sqlite3 /app/persistent/hppgacha.db \"UPDATE users SET available_rolls = available_rolls + 1 WHERE available_rolls< 4\"" ) | crontab -
+RUN (crontab -l ; echo "0 11 */2 * * sqlite3 /app/persistent/hppgacha.db \"UPDATE shadow_portals SET available_shadow_rolls = available_shadow_rolls + 1 WHERE available_shadow_rolls < 2\"" ) | crontab -
 # Build the Go app
 RUN go build -o main .
 
