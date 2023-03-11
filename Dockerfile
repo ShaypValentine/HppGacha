@@ -20,7 +20,7 @@ COPY . .
 
 # RUN (crontab -u root -e)
 RUN echo "0 1 * * * cp /app/persistent/hppgacha.db /app/persistent/hppgachaBackUp.db" >> /var/spool/cron/crontabs/root
-RUN echo "0 */2* * * sqlite3 /app/persistent/hppgacha.db \"UPDATE users SET available_rolls = available_rolls + 1 WHERE available_rolls< 4\"" >> /var/spool/cron/crontabs/root
+RUN echo "0 */2 * * * sqlite3 /app/persistent/hppgacha.db \"UPDATE users SET available_rolls = available_rolls + 1 WHERE available_rolls< 4\"" >> /var/spool/cron/crontabs/root
 RUN echo "0 11 */2 * * sqlite3 /app/persistent/hppgacha.db \"UPDATE shadow_portals SET available_shadow_rolls = available_shadow_rolls + 1 WHERE available_shadow_rolls < 2\"" >> /var/spool/cron/crontabs/root
 
 RUN update-rc.d cron defaults
