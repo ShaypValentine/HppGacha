@@ -57,7 +57,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panicln(err)
 	}
-	connectedUser, _ := getConnectedUser(w, r)
+	connectedUser, _ := GetConnectedUser(w, r)
 	indexInfos.User = connectedUser
 	indexInfos = getTopCollectors(indexInfos)
 	indexInfos = getBanners(indexInfos)
@@ -87,7 +87,7 @@ func Roll(w http.ResponseWriter, r *http.Request) {
 			log.Panicln(err)
 		}
 		rolledItem := getRandom(uint(bannerID))
-		connectedUser, exists := getConnectedUser(w, r)
+		connectedUser, exists := GetConnectedUser(w, r)
 		if exists {
 			Refresh(w, r)
 			if connectedUser.AvailableRolls > 0 {
@@ -146,7 +146,7 @@ func InscriptionPageHandler(w http.ResponseWriter, request *http.Request) {
 	}
 }
 
-func getConnectedUser(w http.ResponseWriter, r *http.Request) (models.User, bool) {
+func GetConnectedUser(w http.ResponseWriter, r *http.Request) (models.User, bool) {
 	var connectedUser models.User
 	sessionCookie, err := r.Cookie("session_token")
 	if err == nil {
@@ -274,7 +274,7 @@ func BannerList(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var bannerInfos BannerInfos
-		bannerInfos.User, _ = getConnectedUser(w, r)
+		bannerInfos.User, _ = GetConnectedUser(w, r)
 		bannerInfos = getBannerCards(bannerInfos, uint(bannerID))
 		for i, card := range bannerInfos.Cards {
 			for _, inv := range bannerInfos.User.CardsInInventory {

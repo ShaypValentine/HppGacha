@@ -27,7 +27,7 @@ func ShowInventory(w http.ResponseWriter, r *http.Request) {
 		templatePath+"_parts/footer.html",
 		templatePath+"_parts/js.html"))
 
-	connectedUser, exists := getConnectedUser(w, r)
+	connectedUser, exists := GetConnectedUser(w, r)
 	if exists {
 		err := tpl.Execute(w, connectedUser)
 		if err != nil {
@@ -50,7 +50,7 @@ func RecycleCard(w http.ResponseWriter, r *http.Request) {
 			log.Panicln(err)
 		}
 		DB.First(&targetedCard, recycleTarget.RecycleTargetId)
-		connectedUser, exists := getConnectedUser(w, r)
+		connectedUser, exists := GetConnectedUser(w, r)
 		if exists {
 			response.NewQuantity, response.ErrorString = consumeDoublonForRoll(connectedUser, targetedCard)
 			w.Header().Set("Content-Type", "application/json")

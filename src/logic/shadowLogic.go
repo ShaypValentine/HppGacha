@@ -23,7 +23,7 @@ func ShadowIndex(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Panic(err)
 	}
-	connectedUser, exists := getConnectedUser(w, r)
+	connectedUser, exists := GetConnectedUser(w, r)
 	if exists {
 		err = tpl.Execute(w, connectedUser)
 		if err != nil {
@@ -46,7 +46,7 @@ func SacrificeCard(w http.ResponseWriter, r *http.Request) {
 			log.Panicln(err)
 		}
 		DB.First(&targetedCard, sacrificeTarget.SacrificeTargetId)
-		connectedUser, exists := getConnectedUser(w, r)
+		connectedUser, exists := GetConnectedUser(w, r)
 		if exists {
 			response.NewQuantity, response.ErrorString = consumeSacrifice(connectedUser, targetedCard)
 			w.Header().Set("Content-Type", "application/json")
@@ -107,7 +107,7 @@ func ShadowRoll(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		w.Header().Set("Content-Type", "application/json")
 		rolledItem := getRandomShadow()
-		connectedUser, exists := getConnectedUser(w, r)
+		connectedUser, exists := GetConnectedUser(w, r)
 		if exists {
 			Refresh(w, r)
 			if connectedUser.ShadowPortal.AvailableShadowRolls > 0 {
