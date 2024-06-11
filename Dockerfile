@@ -1,4 +1,4 @@
-FROM golang:1.20-bullseye
+FROM golang:1.22-bullseye
 
 RUN apt update && apt upgrade  --yes
 RUN apt-get --yes install git 
