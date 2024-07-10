@@ -45,6 +45,7 @@ func main() {
 	http.HandleFunc("/admin", admin.Index)
 	http.HandleFunc("/admin/new_card", admin.NewCard)
 	http.HandleFunc("/admin/edit_card", admin.EditCard)
+	http.HandleFunc("/admin/delete_card", admin.DeleteCard)
 	http.HandleFunc("/admin/show_users", admin.ShowUser)
 	http.HandleFunc("/admin/show_cards", admin.ShowCards)
 	http.HandleFunc("/admin/process_card", admin.ProcessCard)
