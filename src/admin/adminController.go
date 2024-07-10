@@ -109,7 +109,7 @@ func ShowCards(w http.ResponseWriter, r *http.Request) {
 		templateAdminPath+"adminNavBar.html"))
 
 	var cards []models.Card
-	err := DB.Order("cardname asc").Find(&cards).Error
+	err := DB.Preload('Banners').Order("cardname asc").Find(&cards).Error
 	if err != nil {
 		log.Panic(err)
 	}
