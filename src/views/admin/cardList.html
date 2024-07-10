@@ -19,6 +19,7 @@
                     <th>Weight</th>
                     <th>Shadow card</th>
                     <th>Event card</th>
+                    <th>Banners</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -31,6 +32,11 @@
                     <td>{{ .Weight }}</td>
                     <td>{{ .IsShadowCard }}</td>
                     <td>{{ .IsEventCard }}</td>
+                    <td>
+                        {{ range .Banners }}
+                            {{ .Bannername }}<br>
+                        {{ end }}
+                    </td>
                     <td><button onclick="location.href='/admin/edit_card?id={{ .ID}}'">Edit</button></td>
                 </tr>
                 {{end}}
