@@ -83,6 +83,24 @@ func EditCard(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func DeleteCard(w http.ResponseWriter, r *http.Request) {
+    checkAdmin(w, r)
+    
+    // Get the card ID from the request
+    cardID := r.FormValue("id")
+    
+    // Delete the card from the database
+    err := DB.Delete(&models.Card{}, cardID).Error
+    if err != nil {
+        http.Error(w, "Failed to delete card", http.StatusInternalServerError)
+        log.Println("Error deleting card:", err)
+        return
+    }
+    
+    // Redirect to a suitable page after deletion (e.g., card list)
+    http.Redirect(w, r, "/admin/show_cards", http.StatusSeeOther)
+}
+
 func ShowUser(w http.ResponseWriter, r *http.Request) {
 	checkAdmin(w, r)
 
