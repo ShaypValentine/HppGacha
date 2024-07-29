@@ -42,9 +42,10 @@ func main() {
 	http.HandleFunc("/login", logic.LoginPageHandler)
 	http.HandleFunc("/inscription", logic.InscriptionPageHandler)
 	http.HandleFunc("/", logic.Index)
-	http.HandleFunc("/adminw", admin.Index)
+	http.HandleFunc("/admin", admin.Index)
 	http.HandleFunc("/admin/new_card", admin.NewCard)
 	http.HandleFunc("/admin/edit_card", admin.EditCard)
+	http.HandleFunc("/admin/delete_card", admin.DeleteCard)
 	http.HandleFunc("/admin/show_users", admin.ShowUser)
 	http.HandleFunc("/admin/show_cards", admin.ShowCards)
 	http.HandleFunc("/admin/process_card", admin.ProcessCard)
@@ -55,12 +56,12 @@ func main() {
 
 	// Launch app on OS PORT var or 8008
 	env := os.Getenv("LOCALENV")
-	if env != "" {
-		if err := http.ListenAndServe(":8008", nil); err != nil {
+	if env == "prod" {
+		if err := http.ListenAndServeTLS(":8443", "persistent/server.crt", "persistent/server.key", nil); err != nil {
 			log.Panic(err)
 		}
 	} else {
-		if err := http.ListenAndServeTLS(":8443", "/etc/letsencrypt/live/hppgacha.art/fullchain.pem", "/etc/letsencrypt/live/hppgacha.art/privkey.pem", nil); err != nil {
+		if err := http.ListenAndServe(":80", nil); err != nil {
 			log.Panic(err)
 		}
 	}

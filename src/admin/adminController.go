@@ -25,6 +25,8 @@ type InfoForEdit struct {
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
+	checkAdmin(w, r)
+
 	tpl := template.Must(template.New("indexAdmin.html").Funcs(sprig.FuncMap()).ParseFiles(
 		templateAdminPath+"indexAdmin.html",
 		templateAdminPath+"adminNavBar.html"))
@@ -36,6 +38,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewCard(w http.ResponseWriter, r *http.Request) {
+	checkAdmin(w, r)
+
 	tpl := template.Must(template.New("newCard.html").Funcs(sprig.FuncMap()).ParseFiles(
 		templateAdminPath+"newCard.html",
 		templateAdminPath+"adminNavBar.html"))
@@ -49,6 +53,8 @@ func NewCard(w http.ResponseWriter, r *http.Request) {
 }
 
 func EditCard(w http.ResponseWriter, r *http.Request) {
+	checkAdmin(w, r)
+
 	tpl := template.Must(template.New("cardEdit.html").Funcs(sprig.FuncMap()).ParseFiles(
 		templateAdminPath+"cardEdit.html",
 		templateAdminPath+"adminNavBar.html"))
@@ -77,7 +83,27 @@ func EditCard(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func DeleteCard(w http.ResponseWriter, r *http.Request) {
+    checkAdmin(w, r)
+    
+    // Get the card ID from the request
+    cardID := r.FormValue("id")
+    
+    // Delete the card from the database
+    err := DB.Delete(&models.Card{}, cardID).Error
+    if err != nil {
+        http.Error(w, "Failed to delete card", http.StatusInternalServerError)
+        log.Println("Error deleting card:", err)
+        return
+    }
+    
+    // Redirect to a suitable page after deletion (e.g., card list)
+    http.Redirect(w, r, "/admin/show_cards", http.StatusSeeOther)
+}
+
 func ShowUser(w http.ResponseWriter, r *http.Request) {
+	checkAdmin(w, r)
+
 	tpl := template.Must(template.New("userTable.html").Funcs(sprig.FuncMap()).ParseFiles(
 		templateAdminPath+"userTable.html",
 		templateAdminPath+"adminNavBar.html"))
@@ -94,12 +120,14 @@ func ShowUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShowCards(w http.ResponseWriter, r *http.Request) {
+	checkAdmin(w, r)
+
 	tpl := template.Must(template.New("cardList.html").Funcs(sprig.FuncMap()).ParseFiles(
 		templateAdminPath+"cardList.html",
 		templateAdminPath+"adminNavBar.html"))
 
 	var cards []models.Card
-	err := DB.Order("cardname asc").Find(&cards).Error
+	err := DB.Preload("Banners").Order("cardname asc").Find(&cards).Error
 	if err != nil {
 		log.Panic(err)
 	}
@@ -111,6 +139,8 @@ func ShowCards(w http.ResponseWriter, r *http.Request) {
 }
 
 func ProcessCard(w http.ResponseWriter, r *http.Request) {
+	checkAdmin(w, r)
+
 	r.ParseMultipartForm(10 << 20)
 	cardName := r.PostFormValue("cardName")
 	cardRarity, err := strconv.Atoi(r.PostFormValue("rarity"))
@@ -173,6 +203,8 @@ func ProcessCard(w http.ResponseWriter, r *http.Request) {
 }
 
 func ProcessCardEdit(w http.ResponseWriter, r *http.Request) {
+	checkAdmin(w, r)
+
 	r.ParseMultipartForm(10 << 20)
 	cardName := r.PostFormValue("cardName")
 	cardID := r.PostFormValue("cardID")
@@ -219,4 +251,12 @@ func ProcessCardEdit(w http.ResponseWriter, r *http.Request) {
 	logic.EmptyEntries()
 	logic.DataToRoll(DB)
 	http.Redirect(w, r, "/admin/show_cards", http.StatusFound)
+}
+
+func checkAdmin(w http.ResponseWriter, r *http.Request) {
+	connectedUser, exists := logic.GetConnectedUser(w, r)
+	if !exists || connectedUser.Role != "admin" {
+		http.Redirect(w, r, "/", http.StatusFound)
+	}
+
 }
